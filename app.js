@@ -1,13 +1,13 @@
 // HTML Elements
 const statusDiv = document.querySelector('.status');
+const solveDiv = document.querySelector('.solve');
 const resetDiv = document.querySelector('.reset');
 const cellDivs = document.querySelectorAll('.cell');
 const candidateDivs = document.querySelectorAll('.candidate');
+let listItems ;
 var selectedCell = null ;
 // game constants
-const xSymbol = '×';
-const oSymbol = '○';
-
+let sudo;
 // game variables
 let gameIsLive = true;
 let xIsNext = true;
@@ -16,145 +16,160 @@ window.onload = function(){
   document.addEventListener("keydown", keyPush);
 }
 
-// functions
-const letterToSymbol = (letter) => letter === 'x' ? xSymbol : oSymbol;
+const fillGrid = (index) =>{
 
-const handleWin = (letter) => {
-  gameIsLive = false;
-  if (letter === 'x') {
-    statusDiv.innerHTML = `${letterToSymbol(letter)} has won!`;
-  } else {
-    statusDiv.innerHTML = `<span>${letterToSymbol(letter)} has won!</span>`;
-  }
-};
+    console.log("length: ",sudo.allGrids.length, ", index: ", index)
 
-const checkGameStatus = () => {
-  const topLeft = cellDivs[0].classList[1];
-  const topMiddle = cellDivs[1].classList[1];
-  const topRight = cellDivs[2].classList[1];
-  const middleLeft = cellDivs[3].classList[1];
-  const middleMiddle = cellDivs[4].classList[1];
-  const middleRight = cellDivs[5].classList[1];
-  const bottomLeft = cellDivs[6].classList[1];
-  const bottomMiddle = cellDivs[7].classList[1];
-  const bottomRight = cellDivs[8].classList[1];
+  let grid = sudo.allGrids[index];
+  let row, col;
+  for(row = 0; row < 9; row++){
+    for(col = 0; col < 9; col++){
+      let gridCell = grid[row][col], cellNumber = indexOf(row,col), divCell = cellDivs[cellNumber];
+      if(gridCell.hasValue()){
+        divCell.style.visibility = "visible";
+        divCell.innerHTML = gridCell.value;
+        if(!gridCell.fixed) {
+          divCell.style.color = 'blue';
+        }
+        else{
+          divCell.style.color = 'black';
+        }
+        if(gridCell.changed){
+          divCell.style.backgroundColor = "#8AC1FF"
+        }
+        else{
+          divCell.style.backgroundColor = "#D1DDE5"
+        }
+      }
+      else{
+        divCell.style.visibility = "hidden";
+        let candidate;
+        for(let k = 1; k <= 9; k++){
 
-  // check winner
-  if (topLeft && topLeft === topMiddle && topLeft === topRight) {
-    handleWin(topLeft);
-    cellDivs[0].classList.add('won');
-    cellDivs[1].classList.add('won');
-    cellDivs[2].classList.add('won');
-  } else if (middleLeft && middleLeft === middleMiddle && middleLeft === middleRight) {
-    handleWin(middleLeft);
-    cellDivs[3].classList.add('won');
-    cellDivs[4].classList.add('won');
-    cellDivs[5].classList.add('won');
-  } else if (bottomLeft && bottomLeft === bottomMiddle && bottomLeft === bottomRight) {
-    handleWin(bottomLeft);
-    cellDivs[6].classList.add('won');
-    cellDivs[7].classList.add('won');
-    cellDivs[8].classList.add('won');
-  } else if (topLeft && topLeft === middleLeft && topLeft === bottomLeft) {
-    handleWin(topLeft);
-    cellDivs[0].classList.add('won');
-    cellDivs[3].classList.add('won');
-    cellDivs[6].classList.add('won');
-  } else if (topMiddle && topMiddle === middleMiddle && topMiddle === bottomMiddle) {
-    handleWin(topMiddle);
-    cellDivs[1].classList.add('won');
-    cellDivs[4].classList.add('won');
-    cellDivs[7].classList.add('won');
-  } else if (topRight && topRight === middleRight && topRight === bottomRight) {
-    handleWin(topRight);
-    cellDivs[2].classList.add('won');
-    cellDivs[5].classList.add('won');
-    cellDivs[8].classList.add('won');
-  } else if (topLeft && topLeft === middleMiddle && topLeft === bottomRight) {
-    handleWin(topLeft);
-    cellDivs[0].classList.add('won');
-    cellDivs[4].classList.add('won');
-    cellDivs[8].classList.add('won');
-  } else if (topRight && topRight === middleMiddle && topRight === bottomLeft) {
-    handleWin(topRight);
-    cellDivs[2].classList.add('won');
-    cellDivs[4].classList.add('won');
-    cellDivs[6].classList.add('won');
-  } else if (topLeft && topMiddle && topRight && middleLeft && middleMiddle && middleRight && bottomLeft && bottomMiddle && bottomRight) {
-    gameIsLive = false;
-    statusDiv.innerHTML = 'Game is tied!';
-  } else {
-    xIsNext = !xIsNext;
-    if (xIsNext) {
-      statusDiv.innerHTML = `${xSymbol} is next`;
-    } else {
-      statusDiv.innerHTML = `<span>${oSymbol} is next</span>`;
+          candidate = candidateDivs[9* cellNumber + k-1];
+          if(!gridCell.avSet.has(k)){
+            candidate.style.visibility = "hidden";
+          }
+          else{
+            candidate.style.visibility = "visible";
+          }
+        }
+      }
     }
   }
-};
-
-
-// event Handlers
-const colorClear = (newCell) => {
-  selectedCell = newCell;
-};
-const handleReset = () => {
+}
+let runExample=()=>{
+  cellDivs[indexOf(0,5)].innerHTML = "4";
+  cellDivs[indexOf(0,6)].innerHTML = "9";
+  cellDivs[indexOf(1,0)].innerHTML = "5";
+  cellDivs[indexOf(1,1)].innerHTML = "4";
+  cellDivs[indexOf(1,3)].innerHTML = "7";
+  cellDivs[indexOf(1,5)].innerHTML = "6";
+  cellDivs[indexOf(2,0)].innerHTML = "8";
+  cellDivs[indexOf(2,2)].innerHTML = "3";
+  cellDivs[indexOf(2,3)].innerHTML = "1";
+  cellDivs[indexOf(2,7)].innerHTML = "7";
+  cellDivs[indexOf(3,0)].innerHTML = "2";
+  cellDivs[indexOf(3,1)].innerHTML = "6";
+  cellDivs[indexOf(3,2)].innerHTML = "8";
+  cellDivs[indexOf(3,4)].innerHTML = "1";
+  cellDivs[indexOf(3,5)].innerHTML = "7";
+  cellDivs[indexOf(3,7)].innerHTML = "5";
+  cellDivs[indexOf(3,8)].innerHTML = "4";
+  cellDivs[indexOf(4,4)].innerHTML = "5";
+  cellDivs[indexOf(4,5)].innerHTML = "8";
+  cellDivs[indexOf(4,6)].innerHTML = "6";
+  cellDivs[indexOf(5,0)].innerHTML = "4";
+  cellDivs[indexOf(5,1)].innerHTML = "1";
+  cellDivs[indexOf(5,4)].innerHTML = "3";
+  cellDivs[indexOf(5,5)].innerHTML = "2";
+  cellDivs[indexOf(5,6)].innerHTML = "8";
+  cellDivs[indexOf(5,7)].innerHTML = "9";
+  cellDivs[indexOf(5,8)].innerHTML = "7";
+  cellDivs[indexOf(6,5)].innerHTML = "1";
+  cellDivs[indexOf(6,7)].innerHTML = "4";
+  cellDivs[indexOf(6,8)].innerHTML = "3";
+  cellDivs[indexOf(7,0)].innerHTML = "6";
+  cellDivs[indexOf(7,2)].innerHTML = "4";
+  cellDivs[indexOf(7,6)].innerHTML = "1";
+  cellDivs[indexOf(7,8)].innerHTML = "9";
+  cellDivs[indexOf(8,1)].innerHTML = "3";
+  cellDivs[indexOf(8,3)].innerHTML = "8";
+}
+const handleSolve = () => {
+  //runExample();
   let mat = [];
   for(let i=0; i<9; i++) {
     mat[i] = new Array(9).fill(0);
   }
-  let index;
-
-  for(index = 0; index < 81; index++){
+  for(let index = 0; index < 81; index++){
     if(!Number.isNaN(parseInt(cellDivs[index].innerHTML))) {
       mat[rowOf(index)][colOf(index)] = parseInt(cellDivs[index].innerHTML);
     }
   }
-  let sudo = new  SudokuGrid(mat, 9);
+  sudo = new SudokuGrid(mat, 9);
   sudo.solve();
-  let row, col;
-  let str;
-  for(row = 0; row < 9; row++){
-    str = "";
-    for(col = 0; col < 9; col++){
-      let gridCell = sudo.grid[row][col];
-      if(gridCell.hasValue()){
-        if(!gridCell.fixed) {
-          cellDivs[indexOf(row, col)].innerHTML = sudo.grid[row][col].value;
-          cellDivs[indexOf(row, col)].style.color = 'blue';
-        }
-      }
-      else{
-        let cellNumber = indexOf(row,col), k;
-        //console.log(boxN*9 + 3*(row%3) + col%3)
-        let cell =  cellDivs[cellNumber];
-        cell.style.visibility = "hidden";
-        let candidate;
-        for(k = 1; k <= 9; k++){
-          if(!gridCell.avSet.has(k)){
-            candidate = candidateDivs[9* cellNumber + k-1];
-            candidate.style.visibility = "hidden";
-          }
-        }
-        str += "0";
-      }
-    }
-
-  }
-  //console.log(sudo.boxIndexes(1,1)[6]);
+  createList(sudo.stagesList)
+  fillGrid(0);
 };
+
+const handleReset = () => {
+
+  for(let index = 0; index < 81; index++){
+    cellDivs[index].innerHTML = "";
+    cellDivs[index].style.visibility = "visible";
+  }
+};
+
+let createList = (stageList)=>{
+  let list = document.getElementById('list');
+  let i, n = stageList.length;
+  for(i = 0; i < n; i++){
+    stage = stageList[i];
+    console.log(stage);
+    let liNode = document.createElement("LI");
+    liNode.innerHTML = stage;
+    list.appendChild(liNode);
+  }
+  listItems = document.getElementById("list").childNodes;
+  for(const itDiv of listItems){
+    itDiv.addEventListener('click', handleListClick)
+  }
+}
 let changeSelectedCell = (newCell)=>{
   if(selectedCell != null){
-    selectedCell.style.backgroundColor = "#D1DDE5";
+    selectedCell.style.border = "none";
   }
   if(newCell == selectedCell){
     selectedCell = null
   }
   else{
     selectedCell = newCell;
-    selectedCell.style.backgroundColor = "#52BBF7";
-//  selectedCell.style.visibility = "hidden";
+    selectedCell.style.border = "3px solid #44A8FB";
+    //selectedCell.style.visibility = "hidden";
   }
+}
+let printGrid = (index)=>{
+  let grid = sudo.allGrids[index];
+  let row, col, str;
+  for(row = 0; row < 9; row++){
+    str = "";
+    for(col = 0; col < 9; col++){
+      str = str.concat(grid[row][col].value + " ");
+    }
+    console.log(str);
+  }
+  console.log(" ");
+}
+let nextSelectedCell = () =>{
+  let index = selectedIndex(), row = rowOf(index), col = colOf(index)+1;
+  if(col === 9){
+    col = 0; row++;
+    if(row === 9){
+      row = 0;
+    }
+  }
+  changeSelectedCell(cellDivs[indexOf(row, col)])
 }
 const handleCellClick = (e) => {
   let newCell = e.target;
@@ -194,28 +209,41 @@ function keyPush(key){
     let newCell = cellDivs[indexOf(row,col)];
     changeSelectedCell(newCell);
   }
-  if(49 <= keyCode && keyCode <= 57){
+  else if(49 <= keyCode && keyCode <= 57){
     if(selectedCell != null){
-
       selectedCell.innerHTML = String.fromCharCode(keyCode);
-    //const classList = selectedCell.classList;
-    //let text = "n" + String.fromCharCode(keyCode);
-    //classList.remove(classList.item(1));
-    //classList.add(text);
-    checkGameStatus();
+      nextSelectedCell();
   }
   }
   else if(keyCode == 32 ){
     if(selectedCell != null){
       selectedCell.innerHTML = '';
+      nextSelectedCell()
   }
 }
 }
 
+const getListItemIndex = (listItem)=> {
+  let i, itDiv, n = sudo.stagesList.length;
+  for(i = 0; i <= n; i++){
+    itDiv = listItems[i];
+    if(listItem === itDiv){
+      return i-1;
+    }
+  }
+  return -1;
+}
+const handleListClick = (e) =>{
+  console.log("ok");
+  let itClicked = e.target;
+  fillGrid(getListItemIndex(itClicked));
+}
 
 
 // event listeners
+solveDiv.addEventListener('click', handleSolve);
 resetDiv.addEventListener('click', handleReset);
+
 
 for (const cellDiv of cellDivs) {
   cellDiv.addEventListener('click', handleCellClick);
@@ -223,7 +251,7 @@ for (const cellDiv of cellDivs) {
 let selectedIndex = () => {
   for (let i = 0; i < 81; i++) {
     let c = cellDivs[i];
-    if (c == selectedCell) {
+    if (c === selectedCell) {
       return i;
     }
   }
@@ -236,11 +264,15 @@ let boxInGrid = (index) => Math.floor(index/9);
 let cellInBox = index => index%9;
 let rowOf = (index) => Math.floor(cellInBox(index)/3)+ 3*Math.floor(boxInGrid(index)/3);
 let colOf = (index) => cellInBox(index)%3 + 3*(boxInGrid(index)%3);
+
+
+
 class SudokuCell{
   constructor() {
     this.value = 0;
     this.fixed = false;
     this.avSet = null;
+    this.changed = false;
   }
   hasValue() {
     return this.value !== 0;
@@ -252,66 +284,82 @@ class SudokuCell{
   }
 }
 
-class BracketImage{
-  constructor(n) {
-    this.allBrackets = new Array(3*n);
-    this.row = new Array(n);
-    this.col = new Array(n);
-    this.box = new Array(n);
-    for(let i = 0; i < 3*n; i++){
-      this.allBrackets[i] = new Set();
+class Bracket{
+  assignBracket(sudoku){
+    for(let i of SudokuGrid.I){
+      this.row.push(sudoku.grid[i]);
+      this.col.push(Array(9));
+      this.box.push(Array(9));
+      const boxIndexes = sudoku.boxIndexes(i)
+      for(let j of SudokuGrid.I){
+        this.col[i][j] = sudoku.grid[j][i];
+        this.box[i][j] = boxIndexes[j];
+      }
+      for(let i of SudokuGrid.I){
+        this.all[i] = this.row[i];
+        this.all[SudokuGrid.n + i] = this.col[i];
+        this.all[2*SudokuGrid.n + i] = this.box[i];
+      }
     }
-    for(let i = 0; i < n; i++){
-      this.row[i] = this.allBrackets[i];
-      this.col[i] = this.allBrackets[n+i];
-      this.box[i] = this.allBrackets[2*n+i];
+  }
+
+  getImage(index){
+    let res = new Set();
+    let bracket = this.all[index];
+    for(let cell of bracket) {
+      if (cell.hasValue()) {
+        if (res.has(cell.value)) {
+          throw "Bracket constraint violated";
+        } else {
+          res.add(cell.value);
+        }
+      }
+    }
+    return res;
+  }
+
+  constructor(sudoku) {
+    this.row = [];
+    this.rowImage = new Array(SudokuGrid.n);
+    this.col = [];
+    this.colImage = new Array(SudokuGrid.n);
+    this.box = [];
+    this.boxImage = new Array(SudokuGrid.n);
+    this.all = new Array(3*SudokuGrid.n);
+    this.allImage = new Array(3*SudokuGrid.n);
+    this.assignBracket(sudoku);
+    for(let i of SudokuGrid.I){
+      this.rowImage[i] = this.getImage(i)
+      this.colImage[i] = this.getImage(SudokuGrid.n + i)
+      this.boxImage[i] = this.getImage(2*SudokuGrid.n + i)
     }
   }
 }
 
 class SudokuGrid{
   boxOf(row, col){
-    return 3*Math.floor(row/3) + Math.floor(col/3);
+    let root = Math.round((Math.sqrt(SudokuGrid.n)))
+    return root*Math.floor(row/root) + Math.floor(col/root);
   }
-  boxIndexes(row, col){
-    let res = new Array();
-    let root = Math.floor(Math.sqrt(this.n)), startRow = root*Math.floor(row/root), startCol = root*Math.floor(col/root);
-    for(let i = 0; i < 3; i++){
-      for(let j =0; j < 3; j++){
-        res.push([startRow+i, startCol+j]);
+  boxIndexes(index){
+    let res = [];
+    let root = Math.floor(Math.sqrt(SudokuGrid.n)), startRow = root*Math.floor(index/root), startCol = root*Math.floor(index%root);
+    for(let i = 0; i < root; i++){
+      for(let j =0; j < root; j++){
+        res.push(this.grid[startRow+i][startCol+j]);
       }
     }
     return res;
   }
-  fillBracketImages(){
-    this.images = new BracketImage(this.n);
-    let row, col;
-    let cell;
-    for(row = 0; row < 9; row++){
-      for(col = 0; col < 9; col++){
-        cell = this.grid[row][col];
-        if(cell.hasValue()){
-          if(this.images.row[row].has(cell.value) || this.images.col[col].has(cell.value) || this.images.box[this.boxOf(row, col)].has(cell.value)) {
-            throw "Group constraint violated";
-          }
-          else{
-            this.images.row[row].add(cell.value);
-            this.images.col[col].add(cell.value);
-            this.images.box[this.boxOf(row, col)].add(cell.value);
-          }
-        }
-      }
-    }
-  }
   defineAvailableSets(){
     let row, col, val;
     let cell;
-    for(row = 0; row < this.n; row++){
-      for(col = 0; col < this.n; col++){
+    for(row = 0; row < SudokuGrid.n; row++){
+      for(col = 0; col < SudokuGrid.n; col++){
         cell = this.grid[row][col];
         if(!cell.hasValue()){
-          for(val = 0; val <= this.n; val++){
-            if(this.images.row[row].has(val) || this.images.col[col].has(val) || this.images.box[this.boxOf(row,col)].has(val)){
+          for(val = 1; val <= SudokuGrid.n; val++){
+            if(this.brackets.rowImage[row].has(val) || this.brackets.colImage[col].has(val) || this.brackets.boxImage[this.boxOf(row,col)].has(val)){
               cell.avSet.delete(val);
             }
           }
@@ -320,46 +368,90 @@ class SudokuGrid{
     }
   }
   updateNeighborsAvailableSet(row, col, num){
-    let boxIdx = this.boxIndexes(row,col);
-    for(let it = 0; it < this.n; it++){
-      this.grid[row][it].safeAvSetRemove(num);
-      this.grid[it][col].safeAvSetRemove(num);
-      this.grid[boxIdx[it][0]][boxIdx[it][1]].safeAvSetRemove(num);
+    for(let it = 0; it < SudokuGrid.n; it++){
+      this.brackets.row[row][it].safeAvSetRemove(num);
+      this.brackets.col[col][it].safeAvSetRemove(num);
+      this.brackets.box[boxOf(row,col)][it].safeAvSetRemove(num);
     }
 }
   updateCell(row, col, num){
     this.grid[row][col].value = num;
     this.grid[row][col].avSet = null;
-    this.images.row[row].add(num);
-    this.images.col[col].add(num);
-    this.images.box[this.boxOf(row,col)].add(num);
+    if(this.brackets.rowImage[row].has(num) || this.brackets.colImage[col].has(num) || this.brackets.boxImage[this.boxOf(row,col)].has(num)){
+
+    }
+    this.brackets.rowImage[row].add(num);
+    this.brackets.colImage[col].add(num);
+    this.brackets.boxImage[this.boxOf(row,col)].add(num);
     this.updateNeighborsAvailableSet(row,col,num);
   }
 
   stageOne(){
-    let affectedCells = false;
+    let changes = false;
+    let changedCells = [];
     let row, col;
-    for(row in this.I){
-      for(col in this.I){
+    for(row = 0; row < SudokuGrid.n; row++){
+      for(col = 0; col < SudokuGrid.n; col++){
         let cell = this.grid[row][col];
         if(!cell.hasValue() && cell.avSet.size === 1){
-          affectedCells = true;
+          changedCells.push([row,col]);
+          changes = true;
           let [num] = cell.avSet;
           this.updateCell(row, col, num);
         }
       }
     }
-    if(affectedCells){
+    if(changes){
+      this.addDeepCopy("stage 1", changedCells);
       this.stageOne();
     }
   }
+
+
   solve(){
     this.stageOne();
+
   }
+  addDeepCopy(str, changedCells = []){
+    let i,j,k, cell;
+    let newGrid = new Array(9);
+    for(i=0; i<9; i++) {
+      newGrid[i] = new Array(9);
+      for(j = 0; j < 9; j++){
+        newGrid[i][j] = new SudokuCell();
+      }
+    }
+    for(i=0 ; i < 9; i++){
+      for(j = 0; j < 9; j++){
+        cell = newGrid[i][j];
+        cell.fixed = this.grid[i][j].fixed;
+        if(!this.grid[i][j].hasValue()) {
+          cell.avSet = new Set();
+          for (k = 1; k <= 9; k++) {
+            if(this.grid[i][j].avSet.has(k)) {
+              cell.avSet.add(k)
+            }
+          }
+        }
+        else{
+          cell.value = this.grid[i][j].value;
+        }
+      }
+    }
+    for(let pair of changedCells){
+      newGrid[pair[0]][pair[1]].changed = true;
+    }
+    this.allGrids.push(newGrid);
+    this.stagesList.push(str);
+
+  }
+  static n = 9;
+  static I = Array.from(Array(SudokuGrid.n).keys())
+  static Omega = Array.from({length: SudokuGrid.n}, (_, i) => i + 1)
   constructor(numberGrid, n){
-    this.n = n;
-    this.I = Array.from(Array(n).keys())
-    this.Omega = Array.from({length: n}, (_, i) => i + 1)
+    this.allGrids = [];
+    this.stagesList = [];
+    SudokuGrid.n = n;
     this.grid = new Array(9);
     for(let i=0; i<9; i++) {
       this.grid[i] = new Array(9);
@@ -368,8 +460,8 @@ class SudokuGrid{
       }
     }
     let i, j, value;
-    for(i = 0; i < this.n; i++){
-      for(j = 0; j < this.n; j++){
+    for(i = 0; i < SudokuGrid.n; i++){
+      for(j = 0; j < SudokuGrid.n; j++){
         value = numberGrid[i][j];
         if(value !== 0){
           this.grid[i][j].value = value;
@@ -383,8 +475,9 @@ class SudokuGrid{
         }
       }
     }
-    this.fillBracketImages();
+    this.brackets = new Bracket(this);
     this.defineAvailableSets();
+    this.addDeepCopy("stage 0");
 
   }
 }
