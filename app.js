@@ -267,6 +267,7 @@ let colOf = (index) => cellInBox(index)%3 + 3*(boxInGrid(index)%3);
 
 
 
+
 class SudokuCell{
   constructor() {
     this.value = 0;
@@ -284,7 +285,42 @@ class SudokuCell{
   }
 }
 
+
+
 class Bracket{
+
+  rowOfBox(boxIndex, cellIndex){
+    let root = Math.round(Math.sqrt(SudokuGrid.n));
+    return root*Math.floor(boxIndex/root) + Math.floor(cellIndex/root);
+  }
+
+  getRow(bracketIndex, cellIndex){
+    if(bracketIndex < SudokuGrid.n){ // bracket is a row
+      return bracketIndex;
+    }
+    else if (bracketIndex < 2*SudokuGrid.n){// bracket is a col
+      return cellIndex;
+    }
+    else{ // bracket is a box
+      return this.rowOfBox(bracketIndex-2*SudokuGrid.n, cellIndex);
+    }
+  }
+
+  colOfBox(boxIndex, cellIndex){
+    let root = Math.round(Math.sqrt(SudokuGrid.n));
+    return root*(boxIndex%root) + (cellIndex%root);
+  }
+  getCol(bracketIndex, cellIndex){
+    if(bracketIndex < SudokuGrid.n){ // bracket is a row
+      return cellIndex;
+    }
+    else if (bracketIndex < 2*SudokuGrid.n){
+      return bracketIndex-SudokuGrid.n;
+    }
+    else{
+      return this.colOfBox(bracketIndex-2*SudokuGrid.n, cellIndex);
+    }
+  }
   assignBracket(sudoku){
     for(let i of SudokuGrid.I){
       this.row.push(sudoku.grid[i]);
@@ -336,6 +372,9 @@ class Bracket{
   }
 }
 
+
+
+
 class SudokuGrid{
   boxOf(row, col){
     let root = Math.round((Math.sqrt(SudokuGrid.n)))
@@ -367,6 +406,7 @@ class SudokuGrid{
       }
     }
   }
+
   updateNeighborsAvailableSet(row, col, num){
     for(let it = 0; it < SudokuGrid.n; it++){
       this.brackets.row[row][it].safeAvSetRemove(num);
@@ -375,6 +415,7 @@ class SudokuGrid{
     }
 }
   updateCell(row, col, num){
+    console.log("row: ", row, ",   col: ", col);
     this.grid[row][col].value = num;
     this.grid[row][col].avSet = null;
     if(this.brackets.rowImage[row].has(num) || this.brackets.colImage[col].has(num) || this.brackets.boxImage[this.boxOf(row,col)].has(num)){
@@ -405,11 +446,47 @@ class SudokuGrid{
       this.addDeepCopy("stage 1", changedCells);
       this.stageOne();
     }
+    else{
+      this.stageTwo();
+    }
+  }
+
+  stageTwo(){
+    let changes = false;
+    let changedCells = [];
+    for (let bracketIndex = 0; bracketIndex < this.brackets.all.length; bracketIndex++) {
+      let bracket = this.brackets.all[bracketIndex];
+      let map = new Map();
+      for (let cellIndex of SudokuGrid.I) {
+        let cell = bracket[cellIndex];
+        if(!cell.hasValue()) {
+          for (let candidate of cell.avSet) {
+            if (map.has(candidate)) {
+              map.set(candidate, -1);
+            } else {
+              map.set(candidate, cellIndex);
+            }
+          }
+        }
+      }
+      for (let [candidate, cellIndex] of map) {
+        if (0 <= cellIndex) {
+          let row = this.brackets.getRow(bracketIndex, cellIndex), col = this.brackets.getCol(bracketIndex, cellIndex);
+          this.updateCell(row, col, candidate);
+          changes = true;
+          changedCells.push([row,col]);
+        }
+      }
+    }
+    if(changes){
+      this.addDeepCopy("stage 2", changedCells);
+      this.stageTwo();
+    }
   }
 
 
   solve(){
-    this.stageOne();
+    this.stageTwo();
 
   }
   addDeepCopy(str, changedCells = []){
