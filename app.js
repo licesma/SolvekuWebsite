@@ -96,8 +96,81 @@ let runExample=()=>{
   cellDivs[indexOf(8,1)].innerHTML = "3";
   cellDivs[indexOf(8,3)].innerHTML = "8";
 }
+let runExample2=()=>{
+  cellDivs[indexOf(0,1)].innerHTML = "3";
+  cellDivs[indexOf(0,2)].innerHTML = "2";
+  cellDivs[indexOf(0,5)].innerHTML = "6";
+  cellDivs[indexOf(0,6)].innerHTML = "1";
+  cellDivs[indexOf(1,0)].innerHTML = "4";
+  cellDivs[indexOf(1,1)].innerHTML = "1";
+  cellDivs[indexOf(2,3)].innerHTML = "9";
+  cellDivs[indexOf(2,5)].innerHTML = "1";
+  cellDivs[indexOf(3,0)].innerHTML = "5";
+  cellDivs[indexOf(3,4)].innerHTML = "9";
+  cellDivs[indexOf(3,8)].innerHTML = "4";
+  cellDivs[indexOf(4,1)].innerHTML = "6";
+  cellDivs[indexOf(4,7)].innerHTML = "7";
+  cellDivs[indexOf(4,8)].innerHTML = "1";
+  cellDivs[indexOf(5,0)].innerHTML = "3";
+  cellDivs[indexOf(5,4)].innerHTML = "2";
+  cellDivs[indexOf(5,8)].innerHTML = "5";
+  cellDivs[indexOf(6,3)].innerHTML = "5";
+  cellDivs[indexOf(6,5)].innerHTML = "8";
+  cellDivs[indexOf(7,6)].innerHTML = "5";
+  cellDivs[indexOf(7,7)].innerHTML = "1";
+  cellDivs[indexOf(7,8)].innerHTML = "9";
+  cellDivs[indexOf(8,1)].innerHTML = "5";
+  cellDivs[indexOf(8,2)].innerHTML = "7";
+  cellDivs[indexOf(8,5)].innerHTML = "9";
+  cellDivs[indexOf(8,6)].innerHTML = "8";
+  cellDivs[indexOf(8,7)].innerHTML = "6";
+}
+
+let runExample3=()=>{
+
+  cellDivs[indexOf(0,1)].innerHTML = "2";
+  cellDivs[indexOf(0,3)].innerHTML = "9";
+  cellDivs[indexOf(0,4)].innerHTML = "4";
+  cellDivs[indexOf(0,5)].innerHTML = "3";
+  cellDivs[indexOf(0,6)].innerHTML = "7";
+  cellDivs[indexOf(0,7)].innerHTML = "1";
+  cellDivs[indexOf(0,8)].innerHTML = "5";
+  cellDivs[indexOf(1,0)].innerHTML = "9";
+  cellDivs[indexOf(1,2)].innerHTML = "4";
+  cellDivs[indexOf(1,6)].innerHTML = "6";
+  cellDivs[indexOf(2,0)].innerHTML = "7";
+  cellDivs[indexOf(2,1)].innerHTML = "5";
+  cellDivs[indexOf(2,7)].innerHTML = "4";
+  cellDivs[indexOf(3,0)].innerHTML = "5";
+  cellDivs[indexOf(3,3)].innerHTML = "4";
+  cellDivs[indexOf(3,4)].innerHTML = "8";
+  cellDivs[indexOf(4,0)].innerHTML = "2";
+  cellDivs[indexOf(4,6)].innerHTML = "4";
+  cellDivs[indexOf(4,7)].innerHTML = "5";
+  cellDivs[indexOf(4,8)].innerHTML = "3";
+  cellDivs[indexOf(5,0)].innerHTML = "4";
+  cellDivs[indexOf(5,3)].innerHTML = "3";
+  cellDivs[indexOf(5,4)].innerHTML = "5";
+  cellDivs[indexOf(5,5)].innerHTML = "2";
+  cellDivs[indexOf(6,1)].innerHTML = "4";
+  cellDivs[indexOf(6,2)].innerHTML = "2";
+  cellDivs[indexOf(6,7)].innerHTML = "8";
+  cellDivs[indexOf(6,8)].innerHTML = "1";
+  cellDivs[indexOf(7,2)].innerHTML = "5";
+  cellDivs[indexOf(7,5)].innerHTML = "4";
+  cellDivs[indexOf(7,6)].innerHTML = "2";
+  cellDivs[indexOf(7,7)].innerHTML = "6";
+  cellDivs[indexOf(8,1)].innerHTML = "9";
+  cellDivs[indexOf(8,3)].innerHTML = "2";
+  cellDivs[indexOf(8,5)].innerHTML = "8";
+  cellDivs[indexOf(8,6)].innerHTML = "5";
+  cellDivs[indexOf(8,8)].innerHTML = "4";
+
+}
+
 const handleSolve = () => {
-  //runExample();
+  runExample3();
+
   let mat = [];
   for(let i=0; i<9; i++) {
     mat[i] = new Array(9).fill(0);
@@ -274,6 +347,7 @@ class SudokuCell{
     this.fixed = false;
     this.avSet = null;
     this.changed = false;
+    this.changedAvSet = null;
   }
   hasValue() {
     return this.value !== 0;
@@ -288,7 +362,15 @@ class SudokuCell{
 
 
 class Bracket{
-
+  indexOfRow(rowIndex){
+    return rowIndex;
+  }
+  indexOfCol(colIndex){
+    return SudokuGrid.n + colIndex;
+  }
+  indexOfBox(boxIndex){
+    return 2*SudokuGrid.n + boxIndex;
+  }
   rowOfBox(boxIndex, cellIndex){
     let root = Math.round(Math.sqrt(SudokuGrid.n));
     return root*Math.floor(boxIndex/root) + Math.floor(cellIndex/root);
@@ -372,13 +454,22 @@ class Bracket{
   }
 }
 
-
-
+let rowType = "ROW";
+let colType = "COL";
+let boxType = "BOX";
 
 class SudokuGrid{
   boxOf(row, col){
-    let root = Math.round((Math.sqrt(SudokuGrid.n)))
+    let root = Math.round((Math.sqrt(SudokuGrid.n)));
     return root*Math.floor(row/root) + Math.floor(col/root);
+  }
+  rowOf(box, cell){
+    let root = Math.floor((Math.sqrt(SudokuGrid.n)));
+    return root*Math.floor(box/root) + Math.floor(cell/root);
+  }
+  colOf(box, cell){
+    let root = Math.floor((Math.sqrt(SudokuGrid.n)));
+    return root*Math.floor(box%root) + Math.floor(cell%root);
   }
   boxIndexes(index){
     let res = [];
@@ -483,10 +574,86 @@ class SudokuGrid{
       this.stageTwo();
     }
   }
+  rootDiv(index){
+    return Math.round(index/Math.sqrt(SudokuGrid.n));
+  }
+  rootMod(index){
+    return Math.round(index%Math.sqrt(SudokuGrid.n));
+  }
+  getTargetBracket(rootIndex, cellIndex, rootType, targetType){
+    if(rootType === rowType){
+      return this.brackets.box[this.boxOf(rootIndex, cellIndex)];
+    }
+    else if(rootType === colType){
+      return this.brackets.box[this.boxOf(cellIndex, rootIndex)];
+    }
+    else{
+      if(targetType === rowType){
+        return this.brackets.row[this.rowOf(rootIndex, cellIndex)];
+      }
+      else{
+        return this.brackets.col[this.colOf(rootIndex, cellIndex)];
+      }
+    }
+  }
+  pruneBracket(targetBracket, intersection, candidate){
+    for (let cell of targetBracket){
+      if(!intersection.has(cell)){
+        if(cell.avSet !== null && cell.avSet.has(candidate)) {
+          cell.safeAvSetRemove(candidate);
+          console.log(cell)
+        }
+      }
+    }
+  }
+
+  findIntersection(bracketArray, splitFunction, rootType, targetType) {
+    let targetMap = new Map();
+    let cellIndexMap = new Map();
+    let res = []
+    for (let rootIndex of SudokuGrid.I) {
+      targetMap.clear();
+      cellIndexMap.clear();
+      let root = bracketArray[rootIndex];
+      for (let cellIndex of SudokuGrid.I) {
+        let cell = root[cellIndex];
+        let targetIndex = splitFunction(cellIndex);
+
+        if(! cell.hasValue()) {
+          for (let candidate of cell.avSet) {
+            if (!targetMap.has(candidate)) {
+              targetMap.set(candidate, targetIndex);
+              cellIndexMap.set(candidate, [cellIndex]);
+            } else {
+              if (targetMap.get(candidate) === targetIndex) {
+                cellIndexMap.set(candidate, cellIndexMap.get(candidate).concat([cellIndex]))
+              } else {
+                cellIndexMap.delete(candidate)
+                targetMap.set(candidate,-1);
+              }
+            }
+          }
+        }
+
+      }
+      for (let [candidate, targetIndex] of targetMap){
+        if(targetIndex !== -1){
+          console.log(candidate)
+          let targetBracket = this.getTargetBracket(rootIndex, cellIndexMap.get(candidate)[0], rootType, targetType);
+          let getCell = (index) => {return root[index]};
+          let intersection = new Set(cellIndexMap.get(candidate).map(getCell));
+          this.pruneBracket(targetBracket, intersection, candidate);
+        }
+      }
+    }
+  }
+  stageThree(){
+    let changes = false;
+  }
 
 
   solve(){
-    this.stageTwo();
+    //this.stageTwo();
 
   }
   addDeepCopy(str, changedCells = []){
@@ -504,9 +671,13 @@ class SudokuGrid{
         cell.fixed = this.grid[i][j].fixed;
         if(!this.grid[i][j].hasValue()) {
           cell.avSet = new Set();
+          cell.changedAvSet = new Set();
           for (k = 1; k <= 9; k++) {
             if(this.grid[i][j].avSet.has(k)) {
               cell.avSet.add(k)
+            }
+            else if (this.grid[i][j].changedAvSet != null && this.grid[i][j].changedAvSet.has(k)){
+              cell.changedAvSet.add(k)
             }
           }
         }
