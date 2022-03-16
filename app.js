@@ -17,9 +17,6 @@ window.onload = function(){
 }
 
 const fillGrid = (index) =>{
-
-    console.log("length: ",sudo.allGrids.length, ", index: ", index)
-
   let grid = sudo.allGrids[index];
   let row, col;
   for(row = 0; row < 9; row++){
@@ -48,10 +45,21 @@ const fillGrid = (index) =>{
 
           candidate = candidateDivs[9* cellNumber + k-1];
           if(!gridCell.avSet.has(k)){
-            candidate.style.visibility = "hidden";
+            if(gridCell.changedAvSet.has(k)){
+              candidate.style.color = "red";
+            }
+            else {
+              candidate.style.visibility = "hidden";
+            }
           }
           else{
             candidate.style.visibility = "visible";
+            if(gridCell.rootAvSet.has(k)){
+              candidate.style.color = "#8AC1FF";
+            }
+            else {
+              candidate.style.visibility = "black";
+            }
           }
         }
       }
@@ -168,8 +176,92 @@ let runExample3=()=>{
 
 }
 
+
+let runExample4=()=>{
+  cellDivs[indexOf(0,0)].innerHTML = "";
+  cellDivs[indexOf(0,1)].innerHTML = "";
+  cellDivs[indexOf(0,2)].innerHTML = "";
+  cellDivs[indexOf(0,3)].innerHTML = "";
+  cellDivs[indexOf(0,4)].innerHTML = "3";
+  cellDivs[indexOf(0,5)].innerHTML = "";
+  cellDivs[indexOf(0,6)].innerHTML = "";
+  cellDivs[indexOf(0,7)].innerHTML = "8";
+  cellDivs[indexOf(0,8)].innerHTML = "6";
+  cellDivs[indexOf(1,0)].innerHTML = "";
+  cellDivs[indexOf(1,1)].innerHTML = "";
+  cellDivs[indexOf(1,2)].innerHTML = "";
+  cellDivs[indexOf(1,3)].innerHTML = "";
+  cellDivs[indexOf(1,4)].innerHTML = "2";
+  cellDivs[indexOf(1,5)].innerHTML = "";
+  cellDivs[indexOf(1,6)].innerHTML = "";
+  cellDivs[indexOf(1,7)].innerHTML = "4";
+  cellDivs[indexOf(1,8)].innerHTML = "";
+  cellDivs[indexOf(2,0)].innerHTML = "";
+  cellDivs[indexOf(2,1)].innerHTML = "9";
+  cellDivs[indexOf(2,2)].innerHTML = "";
+  cellDivs[indexOf(2,3)].innerHTML = "";
+  cellDivs[indexOf(2,4)].innerHTML = "7";
+  cellDivs[indexOf(2,5)].innerHTML = "8";
+  cellDivs[indexOf(2,6)].innerHTML = "5";
+  cellDivs[indexOf(2,7)].innerHTML = "2";
+  cellDivs[indexOf(2,8)].innerHTML = "";
+  cellDivs[indexOf(3,0)].innerHTML = "3";
+  cellDivs[indexOf(3,1)].innerHTML = "7";
+  cellDivs[indexOf(3,2)].innerHTML = "1";
+  cellDivs[indexOf(3,3)].innerHTML = "8";
+  cellDivs[indexOf(3,4)].innerHTML = "5";
+  cellDivs[indexOf(3,5)].innerHTML = "6";
+  cellDivs[indexOf(3,6)].innerHTML = "2";
+  cellDivs[indexOf(3,7)].innerHTML = "9";
+  cellDivs[indexOf(3,8)].innerHTML = "4";
+  cellDivs[indexOf(4,0)].innerHTML = "9";
+  cellDivs[indexOf(4,1)].innerHTML = "";
+  cellDivs[indexOf(4,2)].innerHTML = "";
+  cellDivs[indexOf(4,3)].innerHTML = "1";
+  cellDivs[indexOf(4,4)].innerHTML = "4";
+  cellDivs[indexOf(4,5)].innerHTML = "2";
+  cellDivs[indexOf(4,6)].innerHTML = "3";
+  cellDivs[indexOf(4,7)].innerHTML = "7";
+  cellDivs[indexOf(4,8)].innerHTML = "5";
+  cellDivs[indexOf(5,0)].innerHTML = "4";
+  cellDivs[indexOf(5,1)].innerHTML = "";
+  cellDivs[indexOf(5,2)].innerHTML = "";
+  cellDivs[indexOf(5,3)].innerHTML = "3";
+  cellDivs[indexOf(5,4)].innerHTML = "9";
+  cellDivs[indexOf(5,5)].innerHTML = "7";
+  cellDivs[indexOf(5,6)].innerHTML = "6";
+  cellDivs[indexOf(5,7)].innerHTML = "1";
+  cellDivs[indexOf(5,8)].innerHTML = "8";
+  cellDivs[indexOf(6,0)].innerHTML = "2";
+  cellDivs[indexOf(6,1)].innerHTML = "";
+  cellDivs[indexOf(6,2)].innerHTML = "";
+  cellDivs[indexOf(6,3)].innerHTML = "7";
+  cellDivs[indexOf(6,4)].innerHTML = "";
+  cellDivs[indexOf(6,5)].innerHTML = "3";
+  cellDivs[indexOf(6,6)].innerHTML = "8";
+  cellDivs[indexOf(6,7)].innerHTML = "5";
+  cellDivs[indexOf(6,8)].innerHTML = "9";
+  cellDivs[indexOf(7,0)].innerHTML = "";
+  cellDivs[indexOf(7,1)].innerHTML = "3";
+  cellDivs[indexOf(7,2)].innerHTML = "9";
+  cellDivs[indexOf(7,3)].innerHTML = "2";
+  cellDivs[indexOf(7,4)].innerHTML = "";
+  cellDivs[indexOf(7,5)].innerHTML = "5";
+  cellDivs[indexOf(7,6)].innerHTML = "4";
+  cellDivs[indexOf(7,7)].innerHTML = "6";
+  cellDivs[indexOf(7,8)].innerHTML = "7";
+  cellDivs[indexOf(8,0)].innerHTML = "7";
+  cellDivs[indexOf(8,1)].innerHTML = "";
+  cellDivs[indexOf(8,2)].innerHTML = "";
+  cellDivs[indexOf(8,3)].innerHTML = "9";
+  cellDivs[indexOf(8,4)].innerHTML = "";
+  cellDivs[indexOf(8,5)].innerHTML = "4";
+  cellDivs[indexOf(8,6)].innerHTML = "1";
+  cellDivs[indexOf(8,7)].innerHTML = "3";
+  cellDivs[indexOf(8,8)].innerHTML = "2";
+}
+
 const handleSolve = () => {
-  runExample3();
 
   let mat = [];
   for(let i=0; i<9; i++) {
@@ -199,7 +291,6 @@ let createList = (stageList)=>{
   let i, n = stageList.length;
   for(i = 0; i < n; i++){
     stage = stageList[i];
-    console.log(stage);
     let liNode = document.createElement("LI");
     liNode.innerHTML = stage;
     list.appendChild(liNode);
@@ -307,7 +398,6 @@ const getListItemIndex = (listItem)=> {
   return -1;
 }
 const handleListClick = (e) =>{
-  console.log("ok");
   let itClicked = e.target;
   fillGrid(getListItemIndex(itClicked));
 }
@@ -347,7 +437,8 @@ class SudokuCell{
     this.fixed = false;
     this.avSet = null;
     this.changed = false;
-    this.changedAvSet = null;
+    this.changedAvSet = new Set();
+    this.rootAvSet = new Set();
   }
   hasValue() {
     return this.value !== 0;
@@ -372,7 +463,7 @@ class Bracket{
     return 2*SudokuGrid.n + boxIndex;
   }
   rowOfBox(boxIndex, cellIndex){
-    let root = Math.round(Math.sqrt(SudokuGrid.n));
+    let root = Math.floor(Math.sqrt(SudokuGrid.n));
     return root*Math.floor(boxIndex/root) + Math.floor(cellIndex/root);
   }
 
@@ -389,7 +480,7 @@ class Bracket{
   }
 
   colOfBox(boxIndex, cellIndex){
-    let root = Math.round(Math.sqrt(SudokuGrid.n));
+    let root = Math.floor(Math.sqrt(SudokuGrid.n));
     return root*(boxIndex%root) + (cellIndex%root);
   }
   getCol(bracketIndex, cellIndex){
@@ -403,6 +494,42 @@ class Bracket{
       return this.colOfBox(bracketIndex-2*SudokuGrid.n, cellIndex);
     }
   }
+
+  defineInversePartitions(){
+    this.inversePartitions = []
+    for (let bracket of this.all) {
+      let partitionImage = []
+      for(let omega of SudokuGrid.Omega){
+        let imageElement = new Set()
+        for(let index of SudokuGrid.I){
+          let cell = bracket[index];
+          if(cell.avSet !== null && cell.avSet.has(omega)){
+            imageElement.add(index);
+          }
+        }
+        if(0 < imageElement.size) {
+          partitionImage.push(imageElement)
+        }
+        else{
+          partitionImage.push(null);
+        }
+      }
+      this.inversePartitions.push(new Partition(SudokuGrid.Omega, partitionImage))
+    }
+  }
+
+  definePartitions(){
+    this.partitions = []
+    for (let bracket of this.all) {
+      let partitionImage = []
+      for (let cell of bracket) {
+        partitionImage.push(cell.avSet)
+      }
+      this.partitions.push(new Partition(SudokuGrid.I, partitionImage))
+    }
+
+  }
+
   assignBracket(sudoku){
     for(let i of SudokuGrid.I){
       this.row.push(sudoku.grid[i]);
@@ -454,13 +581,143 @@ class Bracket{
   }
 }
 
+class Partition{
+
+  eqSet(set1, set2) {
+    if (set1.size !== set2.size) return false;
+    for (let a of set1) if (!set2.has(a)) return false;
+    return true;
+  }
+  addCurrent(set){
+    for (const elem of set){
+      this.current.add(elem);
+    }
+  }
+  minusCurrent(set){
+    for(const elem of set){
+      this.current.delete(elem);
+    }
+  }
+  union(set){// no es necesario en python
+    const union = new Set(this.current);
+    for (const elem of set) {
+      union.add(elem);
+    }
+    return union;
+  }
+
+  findPair(){ // lo puedes hacer en O(n) en python
+    let len = this.domain.length;
+    for(let i of this.valid_indexes){
+      if(!this.used[i]) {
+        for (let ii of this.valid_indexes) {
+          if(i < ii && !this.used[ii]){
+            let unionI = this.union(this.image[i]);
+            let unionII = this.union(this.image[ii])
+            if(unionI.size === this.m && this.eqSet(unionI,unionII)){
+              this.domainRes = new Set();
+              this.used[i] = true
+              this.used[ii] = true
+              for(let index = 0; index < len; index++){
+               if(this.used[index]){
+                 this.domainRes.add(this.domain[index]);
+               }
+              }
+              this.imageRes = this.union(unionI);
+              for(let imageElement of this.imageRes){
+                for (let index of SudokuGrid.I){
+                  if(!this.domainRes.has(this.domain[index]) && this.image[index] !== null && this.image[index].has(imageElement)) {
+                    console.log("Cell: ", index, ", prunea a:", imageElement, "  que esta en: ", this.image[index]);
+                    return true;
+                  }
+                }
+              }
+              this.used[i] = false;
+              this.used[ii] = false;
+            }
+          }
+        }
+      }
+    }
+    return false;
+  }
+  currentCopy(){
+    let set = new Set();
+    for(let elem of this.current){
+      set.add(elem);
+    }
+    return set;
+  }
+  clear(){
+    this.imageRes = null
+    this.domainRes = null
+    this.current = new Set()
+    this.valid_indexes = []
+    for (let index of SudokuGrid.I){
+      if(this.image[index] != null && this.image[index].size <= this.m){
+        this.valid_indexes.push(index);
+      }
+    }
+    this.used = new Array(SudokuGrid.n).fill(false);
+  }
+  getSubPartition(m){
+    this.m = m
+    this.clear()
+    if (this.findSubPartition(m)){
+      return [this.domainRes, this.imageRes]
+    }
+    else{
+      return null
+    }
+  }
+  findSubPartition(partitionSize){
+    if(partitionSize === 2){
+      let used_elem = []
+      for(let j of SudokuGrid.I){
+        if(this.used[j]){
+          used_elem.push(j);
+        }
+      }
+      return this.findPair();
+    }
+    else{
+      for(let i of this.valid_indexes){
+        if(!this.used[i]) {
+          this.used[i] = true;
+          let pastCurrent = this.currentCopy();
+          this.addCurrent(this.image[i]); // diferente en python
+          if (this.current.size <= this.m) {
+            if (this.findSubPartition(partitionSize - 1)) {
+              return true;
+            }
+          }
+          this.used[i] = false;
+          this.current = pastCurrent; //diferente en python
+        }
+      }
+      return false;
+    }
+  }
+
+
+  constructor(domain, image) {
+    this.domain = domain
+    this.image = image
+    this.used = []
+    for (let i of SudokuGrid.I){
+        this.used.push(false);
+    }
+    this.current =  new Set();
+  }
+}
+
 let rowType = "ROW";
 let colType = "COL";
 let boxType = "BOX";
 
 class SudokuGrid{
   boxOf(row, col){
-    let root = Math.round((Math.sqrt(SudokuGrid.n)));
+    let root = Math.floor((Math.sqrt(SudokuGrid.n)));
     return root*Math.floor(row/root) + Math.floor(col/root);
   }
   rowOf(box, cell){
@@ -575,46 +832,64 @@ class SudokuGrid{
     }
   }
   rootDiv(index){
-    return Math.round(index/Math.sqrt(SudokuGrid.n));
+    return Math.floor(index/Math.sqrt(SudokuGrid.n));
   }
   rootMod(index){
-    return Math.round(index%Math.sqrt(SudokuGrid.n));
+    return Math.floor(index%Math.sqrt(SudokuGrid.n));
   }
-  getTargetBracket(rootIndex, cellIndex, rootType, targetType){
+  getTargetBracket(rootIndex, targetIndex, rootType, targetType){
     if(rootType === rowType){
-      return this.brackets.box[this.boxOf(rootIndex, cellIndex)];
+      return this.brackets.box[this.boxOf(rootIndex, Math.sqrt(SudokuGrid.n)*targetIndex)];
     }
     else if(rootType === colType){
-      return this.brackets.box[this.boxOf(cellIndex, rootIndex)];
+      return this.brackets.box[this.boxOf(Math.sqrt(SudokuGrid.n)*targetIndex, rootIndex)];
     }
     else{
       if(targetType === rowType){
-        return this.brackets.row[this.rowOf(rootIndex, cellIndex)];
+        return this.brackets.row[this.rowOf(rootIndex, Math.sqrt(SudokuGrid.n)*targetIndex)];
       }
       else{
-        return this.brackets.col[this.colOf(rootIndex, cellIndex)];
+        return this.brackets.col[this.colOf(rootIndex, targetIndex)];
       }
     }
   }
   pruneBracket(targetBracket, intersection, candidate){
+    let res = false;
     for (let cell of targetBracket){
       if(!intersection.has(cell)){
         if(cell.avSet !== null && cell.avSet.has(candidate)) {
+          console.log("candidate: ", candidate)
+          for(let inCell of intersection){
+            inCell.rootAvSet.add(candidate);
+          }
+
           cell.safeAvSetRemove(candidate);
-          console.log(cell)
+          cell.changedAvSet.add(candidate);
+          res = true;
         }
+      }
+    }
+    return res;
+  }
+
+  clearRootAndChanged(){
+    for(let row of SudokuGrid.I){
+      for(let col of SudokuGrid.I){
+        let cell = this.grid[row][col];
+        cell.changedAvSet.clear();
+        cell.rootAvSet.clear();
       }
     }
   }
 
-  findIntersection(bracketArray, splitFunction, rootType, targetType) {
+  findIntersection(rootBracketArray, splitFunction, rootType, targetType) {
+    let res = false;
     let targetMap = new Map();
     let cellIndexMap = new Map();
-    let res = []
     for (let rootIndex of SudokuGrid.I) {
       targetMap.clear();
       cellIndexMap.clear();
-      let root = bracketArray[rootIndex];
+      let root = rootBracketArray[rootIndex];
       for (let cellIndex of SudokuGrid.I) {
         let cell = root[cellIndex];
         let targetIndex = splitFunction(cellIndex);
@@ -638,22 +913,112 @@ class SudokuGrid{
       }
       for (let [candidate, targetIndex] of targetMap){
         if(targetIndex !== -1){
-          console.log(candidate)
-          let targetBracket = this.getTargetBracket(rootIndex, cellIndexMap.get(candidate)[0], rootType, targetType);
+          let targetBracket = this.getTargetBracket(rootIndex, targetIndex, rootType, targetType);
           let getCell = (index) => {return root[index]};
           let intersection = new Set(cellIndexMap.get(candidate).map(getCell));
-          this.pruneBracket(targetBracket, intersection, candidate);
+          let pruneRes = this.pruneBracket(targetBracket, intersection, candidate);
+          res = res || pruneRes;
         }
       }
     }
+    return res;
   }
   stageThree(){
-    let changes = false;
+    let rowIntersections = this.findIntersection(this.brackets.box, this.rootDiv, boxType, rowType);
+    let colIntersections = this.findIntersection(this.brackets.box, this.rootMod, boxType, colType);
+    let boxRIntersections = this.findIntersection(this.brackets.row, this.rootDiv, rowType, boxType);
+    let boxCIntersections = this.findIntersection(this.brackets.col, this.rootDiv, colType, boxType);
+    this.addDeepCopy("stage 3", []);
+    this.clearRootAndChanged();
+    let changes = rowIntersections || colIntersections || boxRIntersections || boxCIntersections;
+
+
   }
 
+  pruneCells(cells, values){
+    /*
+    for(let cell of cells){
+      for(let omega of values){
+        cell.safeAvSetRemove(omega);
+      }
+    }
 
+     */
+  }
+
+  findNakedSubsets(m) {
+    for (let index = 0; index < 3 * SudokuGrid.n; index++){
+        let partition = this.brackets.partitions[index];
+        let subPartition = partition.getSubPartition(m);
+        if(subPartition !== null){
+          let bracket = this.brackets.all[index];
+          let nakedIndexes = subPartition[0];
+          let pruneCells = []
+          for(let i of SudokuGrid.I){
+            if(!nakedIndexes.has(i)){
+              pruneCells.push(bracket[i]);
+            }
+          }
+          let nakedValues = subPartition[1];
+          let pruneValues = Array.from(nakedValues);
+          console.log("NAKED SUBSET FOUND, Bracket: ", index, ", -cells: ", subPartition[0], " -values: ", subPartition[1])
+          this.pruneCells(pruneCells, pruneValues);
+          return true;
+        }
+    }
+    return false
+  }
+
+  findHiddenSubsets(m){
+    for (let index = 0; index < 3 * SudokuGrid.n; index++){
+      let partition = this.brackets.inversePartitions[index];
+      let subPartition = partition.getSubPartition(m);
+      if(subPartition !== null){
+        let bracket = this.brackets.all[index];
+        let hiddenIndexes = subPartition[1];
+        let pruneCells = []
+        for(let i of hiddenIndexes){
+            pruneCells.push(bracket[i]);
+        }
+        let hiddenValues = subPartition[0];
+        let pruneValues = []
+        for(let i of SudokuGrid.Omega){
+          if(!hiddenValues.has(i)){
+            pruneValues.push(i);
+          }
+        }
+        console.log("HIDDEN SUBSET FOUND, Bracket: ", index, ", -cells: ", hiddenIndexes, " -values: ", hiddenValues)
+        this.pruneCells(pruneCells, pruneValues)
+        return true;
+      }
+    }
+    return false
+  }
+
+  define_bracket_partitions(){
+    this.brackets.definePartitions()
+    this.brackets.defineInversePartitions()
+  }
+
+  stageFour(m){
+    if (this.findNakedSubsets(m) || this.findHiddenSubsets(m)){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
   solve(){
-    //this.stageTwo();
+    this.define_bracket_partitions()
+
+    let maxPartitionLength = Math.floor(SudokuGrid.n/2);
+    for(let i = 2; i <= maxPartitionLength; i++){
+      if (this.stageFour(i)){
+        break;
+      }
+    }
+
+
 
   }
   addDeepCopy(str, changedCells = []){
@@ -672,11 +1037,15 @@ class SudokuGrid{
         if(!this.grid[i][j].hasValue()) {
           cell.avSet = new Set();
           cell.changedAvSet = new Set();
+          cell.rootAvSet = new Set();
           for (k = 1; k <= 9; k++) {
             if(this.grid[i][j].avSet.has(k)) {
               cell.avSet.add(k)
+              if (this.grid[i][j].rootAvSet.has(k)) {
+                cell.rootAvSet.add(k)
+              }
             }
-            else if (this.grid[i][j].changedAvSet != null && this.grid[i][j].changedAvSet.has(k)){
+            else if (this.grid[i][j].changedAvSet.has(k)){
               cell.changedAvSet.add(k)
             }
           }
@@ -728,4 +1097,7 @@ class SudokuGrid{
     this.addDeepCopy("stage 0");
 
   }
+
 }
+imageR = [new Set([1,5]), new Set([1,2,4,5]), new Set([2,4,5,7]), new Set([1,5,6,8]), new Set([1,5,6,8]), new Set([3,5,6,7,8]), new Set([1,6]), null,  new Set([3,4,6])]
+
