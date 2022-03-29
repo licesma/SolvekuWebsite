@@ -133,7 +133,6 @@ let runExample2=()=>{
   cellDivs[indexOf(8,6)].innerHTML = "8";
   cellDivs[indexOf(8,7)].innerHTML = "6";
 }
-
 let runExample3=()=>{
 
   cellDivs[indexOf(0,1)].innerHTML = "2";
@@ -175,8 +174,6 @@ let runExample3=()=>{
   cellDivs[indexOf(8,8)].innerHTML = "4";
 
 }
-
-
 let runExample4=()=>{
   cellDivs[indexOf(0,0)].innerHTML = "";
   cellDivs[indexOf(0,1)].innerHTML = "";
@@ -262,7 +259,6 @@ let runExample4=()=>{
 }
 
 const handleSolve = () => {
-
   let mat = [];
   for(let i=0; i<9; i++) {
     mat[i] = new Array(9).fill(0);
@@ -479,6 +475,8 @@ class Bracket{
     }
   }
 
+
+
   colOfBox(boxIndex, cellIndex){
     let root = Math.floor(Math.sqrt(SudokuGrid.n));
     return root*(boxIndex%root) + (cellIndex%root);
@@ -528,6 +526,40 @@ class Bracket{
       this.partitions.push(new Partition(SudokuGrid.I, partitionImage))
     }
 
+  }
+
+  getNormalPartition(bracket, omega){
+    let res = new Set()
+    for(let cellIndex of SudokuGrid.I){
+      let cell = bracket[cellIndex];
+      if(cell.avSet !== null && cell.avSet.has(omega)){
+        res.add(cellIndex)
+      }
+    }
+    if(res.size === 0){
+      return null
+    }
+    else {
+      return res
+    }
+  }
+
+
+  createNormalPartitions(partitions, bracketArray){
+    partitions.push(null);
+    for(let omega of SudokuGrid.Omega){
+      let normalImage = []
+      for(let bracketIndex of SudokuGrid.I){
+        normalImage.push(this.getNormalPartition(bracketArray[bracketIndex],omega))
+      }
+      partitions.push(new Partition(SudokuGrid.I, normalImage))
+    }
+  }
+  defineNormalPartitions(){
+    this.normalRowPartition = []
+    this.createNormalPartitions(this.normalRowPartition, this.row);
+    this.normalColPartition = []
+    this.createNormalPartitions(this.normalColPartition, this.col);
   }
 
   assignBracket(sudoku){
@@ -1008,12 +1040,59 @@ class SudokuGrid{
       return false;
     }
   }
+
+  define_normal_partitions(){
+    this.brackets.defineNormalPartitions();
+  }
+
+  stageFive(m){
+    let subPartition = null;
+    for(let omega of SudokuGrid.Omega){
+        subPartition = this.brackets.normalRowPartition[omega].getSubPartition(m)
+        if(this.brackets.normalRowPartition[omega].getSubPartition(m) !== null){
+          let exceptionIndexes = subPartition[0];
+          let pruneBracketIndexes = subPartition[1];
+          let pruneBrackets = [];
+          for(let i of pruneBracketIndexes){
+            pruneBrackets.push(this.brackets.col[i])
+          }
+          console.log('rows: ',  exceptionIndexes,'  cols: ', pruneBracketIndexes,'  value: ', omega);
+          this.pruneNormalDifference(pruneBrackets, exceptionIndexes, omega);
+          return true;
+        }
+        subPartition = this.brackets.normalColPartition[omega].getSubPartition(m)
+        if(this.brackets.normalColPartition[omega].getSubPartition(m) !== null){
+          let exceptionIndexes = subPartition[0];
+          let pruneBracketIndexes = subPartition[1];
+          let pruneBrackets = [];
+          for(let i of pruneBracketIndexes){
+            pruneBrackets.push(this.brackets.row[i])
+          }
+          this.pruneNormalDifference(pruneBrackets, exceptionIndexes, omega);
+          console.log('cols: ',  exceptionIndexes,'  rows: ', pruneBracketIndexes,'  value: ', omega);
+          return true;
+        }
+    }
+  }
+
+  pruneNormalDifference(pruneBrackets, exceptionIndexes, omega){
+    for(let bracket of pruneBrackets){
+      for(let index of SudokuGrid.I){
+        if(!exceptionIndexes.has(index)){
+          let cell = bracket[index];
+          cell.safeAvSetRemove(omega)
+        }
+      }
+    }
+    this.addDeepCopy("stage five")
+  }
+
   solve(){
-    this.define_bracket_partitions()
+    this.define_normal_partitions()
 
     let maxPartitionLength = Math.floor(SudokuGrid.n/2);
-    for(let i = 2; i <= maxPartitionLength; i++){
-      if (this.stageFour(i)){
+    for(let i = 3; i <= maxPartitionLength; i++){
+      if (this.stageFive(i)){
         break;
       }
     }
