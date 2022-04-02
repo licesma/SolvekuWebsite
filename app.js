@@ -58,7 +58,7 @@ const fillGrid = (index) =>{
               candidate.style.color = "#8AC1FF";
             }
             else {
-              candidate.style.visibility = "black";
+              candidate.style.color = "black";
             }
           }
         }
@@ -259,6 +259,7 @@ let runExample4=()=>{
 }
 
 const handleSolve = () => {
+  //runExample2();
   let mat = [];
   for(let i=0; i<9; i++) {
     mat[i] = new Array(9).fill(0);
@@ -442,6 +443,10 @@ class SudokuCell{
   safeAvSetRemove(num){
     if(!this.hasValue() && this.avSet.has(num)){
       this.avSet.delete(num);
+      return true
+    }
+    else{
+      return false
     }
   }
 }
@@ -474,8 +479,6 @@ class Bracket{
       return this.rowOfBox(bracketIndex-2*SudokuGrid.n, cellIndex);
     }
   }
-
-
 
   colOfBox(boxIndex, cellIndex){
     let root = Math.floor(Math.sqrt(SudokuGrid.n));
@@ -609,6 +612,9 @@ class Bracket{
       this.rowImage[i] = this.getImage(i)
       this.colImage[i] = this.getImage(SudokuGrid.n + i)
       this.boxImage[i] = this.getImage(2*SudokuGrid.n + i)
+      this.allImage[i] = this.rowImage[i];
+      this.allImage[SudokuGrid.n + i] = this.colImage[i];
+      this.allImage[2*SudokuGrid.n + i] = this.boxImage[i];
     }
   }
 }
@@ -822,16 +828,24 @@ class SudokuGrid{
         }
       }
     }
-    if(changes){
+    if(changes) {
       this.addDeepCopy("stage 1", changedCells);
-      this.stageOne();
     }
-    else{
-      this.stageTwo();
-    }
+    return changes
   }
 
+  bracketHasAllCandidates(bracketIndex, map){
+    // Checks if all the candidates are in a bracket in at leas one cell, or as a cell's value.
+    // if not, then there is an error in the grid.
+    //console.log(Array.from(map.key), this.brackets.allImage[bracketIndex])
+    for(let omega of SudokuGrid.Omega){
+      if(!this.brackets.allImage[bracketIndex].has(omega) && !map.has(omega)){
+        throw "Candidate missing in bracket";
+      }
+    }
+  }
   stageTwo(){
+    //Hermit elimination. Assigns a value to a cell, when it is the only one in a bracket with a specific candidate.
     let changes = false;
     let changedCells = [];
     for (let bracketIndex = 0; bracketIndex < this.brackets.all.length; bracketIndex++) {
@@ -848,7 +862,9 @@ class SudokuGrid{
             }
           }
         }
+
       }
+
       for (let [candidate, cellIndex] of map) {
         if (0 <= cellIndex) {
           let row = this.brackets.getRow(bracketIndex, cellIndex), col = this.brackets.getCol(bracketIndex, cellIndex);
@@ -857,11 +873,12 @@ class SudokuGrid{
           changedCells.push([row,col]);
         }
       }
+      this.bracketHasAllCandidates(bracketIndex, map)
     }
     if(changes){
       this.addDeepCopy("stage 2", changedCells);
-      this.stageTwo();
     }
+    return changes
   }
   rootDiv(index){
     return Math.floor(index/Math.sqrt(SudokuGrid.n));
@@ -926,7 +943,7 @@ class SudokuGrid{
         let cell = root[cellIndex];
         let targetIndex = splitFunction(cellIndex);
 
-        if(! cell.hasValue()) {
+        if(!cell.hasValue()) {
           for (let candidate of cell.avSet) {
             if (!targetMap.has(candidate)) {
               targetMap.set(candidate, targetIndex);
@@ -955,27 +972,25 @@ class SudokuGrid{
     }
     return res;
   }
+
   stageThree(){
     let rowIntersections = this.findIntersection(this.brackets.box, this.rootDiv, boxType, rowType);
     let colIntersections = this.findIntersection(this.brackets.box, this.rootMod, boxType, colType);
     let boxRIntersections = this.findIntersection(this.brackets.row, this.rootDiv, rowType, boxType);
     let boxCIntersections = this.findIntersection(this.brackets.col, this.rootDiv, colType, boxType);
-    this.addDeepCopy("stage 3", []);
-    this.clearRootAndChanged();
     let changes = rowIntersections || colIntersections || boxRIntersections || boxCIntersections;
-
-
+    if(changes){
+      this.addDeepCopy("stage 3", []);
+    }
+    return changes
   }
 
   pruneCells(cells, values){
-    /*
     for(let cell of cells){
       for(let omega of values){
         cell.safeAvSetRemove(omega);
       }
     }
-
-     */
   }
 
   findNakedSubsets(m) {
@@ -986,15 +1001,29 @@ class SudokuGrid{
           let bracket = this.brackets.all[index];
           let nakedIndexes = subPartition[0];
           let pruneCells = []
+          let sourceCells = []
           for(let i of SudokuGrid.I){
             if(!nakedIndexes.has(i)){
               pruneCells.push(bracket[i]);
+            }
+            else{
+              sourceCells.push(bracket[i]);
             }
           }
           let nakedValues = subPartition[1];
           let pruneValues = Array.from(nakedValues);
           console.log("NAKED SUBSET FOUND, Bracket: ", index, ", -cells: ", subPartition[0], " -values: ", subPartition[1])
           this.pruneCells(pruneCells, pruneValues);
+          for(let value of nakedValues){
+            for(let cell of pruneCells){
+              console.log(cell)
+              cell.changedAvSet.add(value)
+            }
+            for (let cell of sourceCells){
+              cell.rootAvSet.add(value)
+            }
+          }
+          this.addDeepCopy('Naked Subset')
           return true;
         }
     }
@@ -1009,8 +1038,10 @@ class SudokuGrid{
         let bracket = this.brackets.all[index];
         let hiddenIndexes = subPartition[1];
         let pruneCells = []
-        for(let i of hiddenIndexes){
+        for(let i of SudokuGrid.I){
+          if(hiddenIndexes.has(i)) {
             pruneCells.push(bracket[i]);
+          }
         }
         let hiddenValues = subPartition[0];
         let pruneValues = []
@@ -1019,8 +1050,20 @@ class SudokuGrid{
             pruneValues.push(i);
           }
         }
+        for(let cell of pruneCells){
+          for (let omega of SudokuGrid.Omega){
+            if(hiddenValues.has(omega)){
+              cell.rootAvSet.add(omega)
+            }
+            else{
+              cell.changedAvSet.add(omega)
+            }
+          }
+        }
+
         console.log("HIDDEN SUBSET FOUND, Bracket: ", index, ", -cells: ", hiddenIndexes, " -values: ", hiddenValues)
         this.pruneCells(pruneCells, pruneValues)
+        this.addDeepCopy('Hidden Subset')
         return true;
       }
     }
@@ -1033,12 +1076,7 @@ class SudokuGrid{
   }
 
   stageFour(m){
-    if (this.findNakedSubsets(m) || this.findHiddenSubsets(m)){
-      return true;
-    }
-    else{
-      return false;
-    }
+    return  this.findHiddenSubsets(m) || this.findNakedSubsets(m)
   }
 
   define_normal_partitions(){
@@ -1049,7 +1087,7 @@ class SudokuGrid{
     let subPartition = null;
     for(let omega of SudokuGrid.Omega){
         subPartition = this.brackets.normalRowPartition[omega].getSubPartition(m)
-        if(this.brackets.normalRowPartition[omega].getSubPartition(m) !== null){
+        if(subPartition !== null){
           let exceptionIndexes = subPartition[0];
           let pruneBracketIndexes = subPartition[1];
           let pruneBrackets = [];
@@ -1057,49 +1095,201 @@ class SudokuGrid{
             pruneBrackets.push(this.brackets.col[i])
           }
           console.log('rows: ',  exceptionIndexes,'  cols: ', pruneBracketIndexes,'  value: ', omega);
-          this.pruneNormalDifference(pruneBrackets, exceptionIndexes, omega);
+          this.pruneNormalDifference(pruneBrackets, exceptionIndexes, omega, 'Row');
           return true;
         }
         subPartition = this.brackets.normalColPartition[omega].getSubPartition(m)
-        if(this.brackets.normalColPartition[omega].getSubPartition(m) !== null){
+        if(subPartition !== null){
           let exceptionIndexes = subPartition[0];
           let pruneBracketIndexes = subPartition[1];
           let pruneBrackets = [];
           for(let i of pruneBracketIndexes){
             pruneBrackets.push(this.brackets.row[i])
           }
-          this.pruneNormalDifference(pruneBrackets, exceptionIndexes, omega);
+          this.pruneNormalDifference(pruneBrackets, exceptionIndexes, omega, 'Column');
           console.log('cols: ',  exceptionIndexes,'  rows: ', pruneBracketIndexes,'  value: ', omega);
           return true;
         }
     }
+    return false
   }
 
-  pruneNormalDifference(pruneBrackets, exceptionIndexes, omega){
+  pruneNormalDifference(pruneBrackets, exceptionIndexes, omega, sourceType){
     for(let bracket of pruneBrackets){
       for(let index of SudokuGrid.I){
+        let cell = bracket[index];
         if(!exceptionIndexes.has(index)){
-          let cell = bracket[index];
-          cell.safeAvSetRemove(omega)
+          if(cell.safeAvSetRemove(omega)){
+            cell.changedAvSet.add(omega)
+          }
+        }
+        else{
+          if(cell.avSet != null && cell.avSet.has(omega)){
+            cell.rootAvSet.add(omega)
+          }
         }
       }
     }
-    this.addDeepCopy("stage five")
+    this.addDeepCopy(sourceType + ' Orthogonal')
   }
 
+  isFinished(){
+    for(let index of SudokuGrid.I){
+      if(this.brackets.rowImage[index].size !== 9){
+        return false;
+      }
+    }
+    return true;
+  }
   solve(){
-    this.define_normal_partitions()
-
-    let maxPartitionLength = Math.floor(SudokuGrid.n/2);
-    for(let i = 3; i <= maxPartitionLength; i++){
-      if (this.stageFive(i)){
-        break;
+    let count = 0
+    while(count < 20 && !this.isFinished()) {
+      console.log(count, 'count')
+      count++;
+      if (this.stageOne()) {
+        console.log('Stage 1')
+      } else {
+        if (this.stageTwo()) {
+          console.log('Stage 2')
+        }
+        else{
+          if(this.stageThree()){
+            console.log('Stage 3')
+          }
+          else{
+            let m, half = Math.floor(SudokuGrid.n/2)
+            this.define_bracket_partitions()
+            this.define_normal_partitions()
+            for(m = 2; m<= half; m++){
+              if (this.stageFour(m)){
+                break;
+              }
+              if(this.stageFive(m)){
+                break;
+              }
+            }
+            if(half < m){
+              console.log('No more to do')
+              break;
+            }
+          }
+        }
+      }
+    }
+    /*
+    while(count < 5 || !this.isFinished()){
+      count++;
+      if(this.stageOne()){
+        console.log('Stage 1')
+      }
+      else{
+        if(this.stageTwo()){
+          console.log('Stage 2')
+        }
+        else{
+          if(this.stageThree()){
+            console.log('Stage 3')
+          }
+          else{
+            let m, half = Math.floor(SudokuGrid.n/2)
+            this.define_bracket_partitions()
+            this.define_normal_partitions()
+            for(m = 2; m <= half ;m++){
+              if (this.stageFour(m)){
+                console.log('Stage 4')
+                break;
+              }
+              if (this.stageFive(m)){
+                console.log('Stage 5')
+                break
+              }
+            }
+            if (m === Math.floor(SudokuGrid.n/2)){
+              break;
+            }
+          }
+        }
       }
     }
 
-
-
+     */
   }
+
+  rateBracket(mainCell, bracket, omega, rateArray){
+    let omegaCount = 1;
+    for(let cell of bracket){
+      if(cell !== mainCell && cell.avSet !== null && cell.avSet.has(omega)){
+        let av_set_size = cell.avSet.size
+        if(2 <= av_set_size){
+          omegaCount++;
+          rateArray[av_set_size-2]++;
+        }
+      }
+    }
+    if(1 <= omegaCount){
+      rateArray[omegaCount-2]++;
+    }
+  }
+  xor(condition1, condition2){
+    return (condition1 && !condition2) || (!condition1 && condition2);
+  }
+  substractRepeatedCells(row, col, omega, rateArray){
+    let root = Math.sqrt(SudokuGrid.n)
+    let fullBox = this.brackets.box[this.boxOf(row,col)]
+    let repeatedCells = []
+    for(let index of SudokuGrid.I){
+      if(this.xor(Math.floor(index/root) === row%root, index%root === col%root)){
+        repeatedCells.push(fullBox[index]);
+      }
+    }
+    for(let cell of repeatedCells){
+        if(cell.avSet != null && cell.avSet.has(omega) && 2 <= cell.avSet.size){
+          rateArray[cell.avSet.size-2]--;
+        }
+    }
+  }
+  rateCellCandidate(row, col, omega){
+    let rateArray = new Array(SudokuGrid.n).fill(0);
+    let cell = this.grid[row][col]
+    rateArray[cell.avSet.size-2]++;
+    this.rateBracket(cell, this.brackets.row[row], omega, rateArray);
+    this.rateBracket(cell, this.brackets.col[col], omega, rateArray);
+    this.rateBracket(cell, this.brackets.box[this.boxOf(row,col)], omega, rateArray);
+    this.substractRepeatedCells(row, col, omega, rateArray)
+    return rateArray;
+  }
+
+  findBacktrackCandidate(){
+    let selectedRow, selectedCol, selectedOmega
+    let max = new Array(SudokuGrid.n).fill(0)
+    for(let row of SudokuGrid.I){
+      for(let col of SudokuGrid.I){
+        let cell = this.grid[row][col]
+        if (cell.avSet !== null) {
+          for (let omega of cell.avSet) {
+            let current = this.rateCellCandidate(row, col, omega);
+            for (let index of SudokuGrid.I) {
+              if (max[index] < current[index]) {
+                max = current;
+                selectedRow = row;
+                selectedCol = col;
+                selectedOmega = omega;
+                console.log('row: ', row, ' col: ', col, '  omega: ', omega)
+                console.log(max)
+              } else if (current[index] < max[index]) {
+                break;
+              }
+            }
+            console.log('-----------')
+          }
+        }
+      }
+    }
+    return [selectedRow, selectedCol, selectedOmega];
+  }
+
+
+
   addDeepCopy(str, changedCells = []){
     let i,j,k, cell;
     let newGrid = new Array(9);
@@ -1139,7 +1329,7 @@ class SudokuGrid{
     }
     this.allGrids.push(newGrid);
     this.stagesList.push(str);
-
+    this.clearRootAndChanged();
   }
   static n = 9;
   static I = Array.from(Array(SudokuGrid.n).keys())
