@@ -1142,10 +1142,7 @@ class SudokuGrid{
     return true;
   }
   solve(){
-    let count = 0
-    while(count < 20 && !this.isFinished()) {
-      console.log(count, 'count')
-      count++;
+    while(!this.isFinished()) {
       if (this.stageOne()) {
         console.log('Stage 1')
       } else {
@@ -1176,43 +1173,6 @@ class SudokuGrid{
         }
       }
     }
-    /*
-    while(count < 5 || !this.isFinished()){
-      count++;
-      if(this.stageOne()){
-        console.log('Stage 1')
-      }
-      else{
-        if(this.stageTwo()){
-          console.log('Stage 2')
-        }
-        else{
-          if(this.stageThree()){
-            console.log('Stage 3')
-          }
-          else{
-            let m, half = Math.floor(SudokuGrid.n/2)
-            this.define_bracket_partitions()
-            this.define_normal_partitions()
-            for(m = 2; m <= half ;m++){
-              if (this.stageFour(m)){
-                console.log('Stage 4')
-                break;
-              }
-              if (this.stageFive(m)){
-                console.log('Stage 5')
-                break
-              }
-            }
-            if (m === Math.floor(SudokuGrid.n/2)){
-              break;
-            }
-          }
-        }
-      }
-    }
-
-     */
   }
 
   rateBracket(mainCell, bracket, omega, rateArray){
@@ -1227,7 +1187,7 @@ class SudokuGrid{
       }
     }
     if(1 <= omegaCount){
-      rateArray[omegaCount-2]++;
+     // rateArray[omegaCount-2]++;
     }
   }
   xor(condition1, condition2){
@@ -1242,6 +1202,7 @@ class SudokuGrid{
         repeatedCells.push(fullBox[index]);
       }
     }
+
     for(let cell of repeatedCells){
         if(cell.avSet != null && cell.avSet.has(omega) && 2 <= cell.avSet.size){
           rateArray[cell.avSet.size-2]--;
