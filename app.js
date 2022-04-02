@@ -1176,18 +1176,13 @@ class SudokuGrid{
   }
 
   rateBracket(mainCell, bracket, omega, rateArray){
-    let omegaCount = 1;
     for(let cell of bracket){
       if(cell !== mainCell && cell.avSet !== null && cell.avSet.has(omega)){
         let av_set_size = cell.avSet.size
         if(2 <= av_set_size){
-          omegaCount++;
           rateArray[av_set_size-2]++;
         }
       }
-    }
-    if(1 <= omegaCount){
-     // rateArray[omegaCount-2]++;
     }
   }
   xor(condition1, condition2){
