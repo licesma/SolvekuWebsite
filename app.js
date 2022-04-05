@@ -46,6 +46,7 @@ const fillGrid = (index) =>{
           candidate = candidateDivs[9* cellNumber + k-1];
           if(!gridCell.avSet.has(k)){
             if(gridCell.changedAvSet.has(k)){
+              candidate.style.visibility = "visible";
               candidate.style.color = "red";
             }
             else {
@@ -257,9 +258,174 @@ let runExample4=()=>{
   cellDivs[indexOf(8,7)].innerHTML = "3";
   cellDivs[indexOf(8,8)].innerHTML = "2";
 }
-
+let runExample5=()=>{
+  cellDivs[indexOf(0,0)].innerHTML = "";
+  cellDivs[indexOf(0,1)].innerHTML = "2";
+  cellDivs[indexOf(0,2)].innerHTML = "";
+  cellDivs[indexOf(0,3)].innerHTML = "9";
+  cellDivs[indexOf(0,4)].innerHTML = "4";
+  cellDivs[indexOf(0,5)].innerHTML = "3";
+  cellDivs[indexOf(0,6)].innerHTML = "7";
+  cellDivs[indexOf(0,7)].innerHTML = "1";
+  cellDivs[indexOf(0,8)].innerHTML = "5";
+  cellDivs[indexOf(1,0)].innerHTML = "9";
+  cellDivs[indexOf(1,1)].innerHTML = "";
+  cellDivs[indexOf(1,2)].innerHTML = "4";
+  cellDivs[indexOf(1,3)].innerHTML = "";
+  cellDivs[indexOf(1,4)].innerHTML = "";
+  cellDivs[indexOf(1,5)].innerHTML = "";
+  cellDivs[indexOf(1,6)].innerHTML = "6";
+  cellDivs[indexOf(1,7)].innerHTML = "";
+  cellDivs[indexOf(1,8)].innerHTML = "";
+  cellDivs[indexOf(2,0)].innerHTML = "7";
+  cellDivs[indexOf(2,1)].innerHTML = "5";
+  cellDivs[indexOf(2,2)].innerHTML = "";
+  cellDivs[indexOf(2,3)].innerHTML = "";
+  cellDivs[indexOf(2,4)].innerHTML = "";
+  cellDivs[indexOf(2,5)].innerHTML = "";
+  cellDivs[indexOf(2,6)].innerHTML = "";
+  cellDivs[indexOf(2,7)].innerHTML = "4";
+  cellDivs[indexOf(2,8)].innerHTML = "";
+  cellDivs[indexOf(3,0)].innerHTML = "5";
+  cellDivs[indexOf(3,1)].innerHTML = "";
+  cellDivs[indexOf(3,2)].innerHTML = "";
+  cellDivs[indexOf(3,3)].innerHTML = "4";
+  cellDivs[indexOf(3,4)].innerHTML = "8";
+  cellDivs[indexOf(3,5)].innerHTML = "";
+  cellDivs[indexOf(3,6)].innerHTML = "";
+  cellDivs[indexOf(3,7)].innerHTML = "";
+  cellDivs[indexOf(3,8)].innerHTML = "";
+  cellDivs[indexOf(4,0)].innerHTML = "2";
+  cellDivs[indexOf(4,1)].innerHTML = "";
+  cellDivs[indexOf(4,2)].innerHTML = "";
+  cellDivs[indexOf(4,3)].innerHTML = "";
+  cellDivs[indexOf(4,4)].innerHTML = "";
+  cellDivs[indexOf(4,5)].innerHTML = "";
+  cellDivs[indexOf(4,6)].innerHTML = "4";
+  cellDivs[indexOf(4,7)].innerHTML = "5";
+  cellDivs[indexOf(4,8)].innerHTML = "3";
+  cellDivs[indexOf(5,0)].innerHTML = "4";
+  cellDivs[indexOf(5,1)].innerHTML = "";
+  cellDivs[indexOf(5,2)].innerHTML = "";
+  cellDivs[indexOf(5,3)].innerHTML = "3";
+  cellDivs[indexOf(5,4)].innerHTML = "5";
+  cellDivs[indexOf(5,5)].innerHTML = "2";
+  cellDivs[indexOf(5,6)].innerHTML = "";
+  cellDivs[indexOf(5,7)].innerHTML = "";
+  cellDivs[indexOf(5,8)].innerHTML = "";
+  cellDivs[indexOf(6,0)].innerHTML = "";
+  cellDivs[indexOf(6,1)].innerHTML = "4";
+  cellDivs[indexOf(6,2)].innerHTML = "2";
+  cellDivs[indexOf(6,3)].innerHTML = "";
+  cellDivs[indexOf(6,4)].innerHTML = "";
+  cellDivs[indexOf(6,5)].innerHTML = "";
+  cellDivs[indexOf(6,6)].innerHTML = "";
+  cellDivs[indexOf(6,7)].innerHTML = "8";
+  cellDivs[indexOf(6,8)].innerHTML = "1";
+  cellDivs[indexOf(7,0)].innerHTML = "";
+  cellDivs[indexOf(7,1)].innerHTML = "";
+  cellDivs[indexOf(7,2)].innerHTML = "5";
+  cellDivs[indexOf(7,3)].innerHTML = "";
+  cellDivs[indexOf(7,4)].innerHTML = "";
+  cellDivs[indexOf(7,5)].innerHTML = "4";
+  cellDivs[indexOf(7,6)].innerHTML = "2";
+  cellDivs[indexOf(7,7)].innerHTML = "6";
+  cellDivs[indexOf(7,8)].innerHTML = "";
+  cellDivs[indexOf(8,0)].innerHTML = "";
+  cellDivs[indexOf(8,1)].innerHTML = "9";
+  cellDivs[indexOf(8,2)].innerHTML = "";
+  cellDivs[indexOf(8,3)].innerHTML = "2";
+  cellDivs[indexOf(8,4)].innerHTML = "";
+  cellDivs[indexOf(8,5)].innerHTML = "8";
+  cellDivs[indexOf(8,6)].innerHTML = "5";
+  cellDivs[indexOf(8,7)].innerHTML = "";
+  cellDivs[indexOf(8,8)].innerHTML = "4";
+}
+let runExample6=()=>{
+  cellDivs[indexOf(0,0)].innerHTML = "";
+  cellDivs[indexOf(0,1)].innerHTML = "";
+  cellDivs[indexOf(0,2)].innerHTML = "";
+  cellDivs[indexOf(0,3)].innerHTML = "";
+  cellDivs[indexOf(0,4)].innerHTML = "1";
+  cellDivs[indexOf(0,5)].innerHTML = "";
+  cellDivs[indexOf(0,6)].innerHTML = "";
+  cellDivs[indexOf(0,7)].innerHTML = "";
+  cellDivs[indexOf(0,8)].innerHTML = "";
+  cellDivs[indexOf(1,0)].innerHTML = "";
+  cellDivs[indexOf(1,1)].innerHTML = "6";
+  cellDivs[indexOf(1,2)].innerHTML = "";
+  cellDivs[indexOf(1,3)].innerHTML = "";
+  cellDivs[indexOf(1,4)].innerHTML = "";
+  cellDivs[indexOf(1,5)].innerHTML = "";
+  cellDivs[indexOf(1,6)].innerHTML = "";
+  cellDivs[indexOf(1,7)].innerHTML = "9";
+  cellDivs[indexOf(1,8)].innerHTML = "";
+  cellDivs[indexOf(2,0)].innerHTML = "";
+  cellDivs[indexOf(2,1)].innerHTML = "";
+  cellDivs[indexOf(2,2)].innerHTML = "8";
+  cellDivs[indexOf(2,3)].innerHTML = "2";
+  cellDivs[indexOf(2,4)].innerHTML = "4";
+  cellDivs[indexOf(2,5)].innerHTML = "";
+  cellDivs[indexOf(2,6)].innerHTML = "";
+  cellDivs[indexOf(2,7)].innerHTML = "";
+  cellDivs[indexOf(2,8)].innerHTML = "6";
+  cellDivs[indexOf(3,0)].innerHTML = "4";
+  cellDivs[indexOf(3,1)].innerHTML = "";
+  cellDivs[indexOf(3,2)].innerHTML = "";
+  cellDivs[indexOf(3,3)].innerHTML = "5";
+  cellDivs[indexOf(3,4)].innerHTML = "2";
+  cellDivs[indexOf(3,5)].innerHTML = "";
+  cellDivs[indexOf(3,6)].innerHTML = "";
+  cellDivs[indexOf(3,7)].innerHTML = "3";
+  cellDivs[indexOf(3,8)].innerHTML = "";
+  cellDivs[indexOf(4,0)].innerHTML = "";
+  cellDivs[indexOf(4,1)].innerHTML = "";
+  cellDivs[indexOf(4,2)].innerHTML = "";
+  cellDivs[indexOf(4,3)].innerHTML = "";
+  cellDivs[indexOf(4,4)].innerHTML = "";
+  cellDivs[indexOf(4,5)].innerHTML = "1";
+  cellDivs[indexOf(4,6)].innerHTML = "";
+  cellDivs[indexOf(4,7)].innerHTML = "";
+  cellDivs[indexOf(4,8)].innerHTML = "2";
+  cellDivs[indexOf(5,0)].innerHTML = "";
+  cellDivs[indexOf(5,1)].innerHTML = "";
+  cellDivs[indexOf(5,2)].innerHTML = "5";
+  cellDivs[indexOf(5,3)].innerHTML = "";
+  cellDivs[indexOf(5,4)].innerHTML = "";
+  cellDivs[indexOf(5,5)].innerHTML = "9";
+  cellDivs[indexOf(5,6)].innerHTML = "";
+  cellDivs[indexOf(5,7)].innerHTML = "";
+  cellDivs[indexOf(5,8)].innerHTML = "";
+  cellDivs[indexOf(6,0)].innerHTML = "";
+  cellDivs[indexOf(6,1)].innerHTML = "";
+  cellDivs[indexOf(6,2)].innerHTML = "4";
+  cellDivs[indexOf(6,3)].innerHTML = "8";
+  cellDivs[indexOf(6,4)].innerHTML = "6";
+  cellDivs[indexOf(6,5)].innerHTML = "";
+  cellDivs[indexOf(6,6)].innerHTML = "";
+  cellDivs[indexOf(6,7)].innerHTML = "";
+  cellDivs[indexOf(6,8)].innerHTML = "9";
+  cellDivs[indexOf(7,0)].innerHTML = "";
+  cellDivs[indexOf(7,1)].innerHTML = "";
+  cellDivs[indexOf(7,2)].innerHTML = "";
+  cellDivs[indexOf(7,3)].innerHTML = "";
+  cellDivs[indexOf(7,4)].innerHTML = "";
+  cellDivs[indexOf(7,5)].innerHTML = "5";
+  cellDivs[indexOf(7,6)].innerHTML = "";
+  cellDivs[indexOf(7,7)].innerHTML = "";
+  cellDivs[indexOf(7,8)].innerHTML = "";
+  cellDivs[indexOf(8,0)].innerHTML = "3";
+  cellDivs[indexOf(8,1)].innerHTML = "";
+  cellDivs[indexOf(8,2)].innerHTML = "";
+  cellDivs[indexOf(8,3)].innerHTML = "";
+  cellDivs[indexOf(8,4)].innerHTML = "";
+  cellDivs[indexOf(8,5)].innerHTML = "";
+  cellDivs[indexOf(8,6)].innerHTML = "7";
+  cellDivs[indexOf(8,7)].innerHTML = "";
+  cellDivs[indexOf(8,8)].innerHTML = "";
+}
 const handleSolve = () => {
-  //runExample2();
+  runExample6();
   let mat = [];
   for(let i=0; i<9; i++) {
     mat[i] = new Array(9).fill(0);
@@ -269,7 +435,7 @@ const handleSolve = () => {
       mat[rowOf(index)][colOf(index)] = parseInt(cellDivs[index].innerHTML);
     }
   }
-  sudo = new SudokuGrid(mat, 9);
+  sudo = new SudokuGrid(mat);
   sudo.solve();
   createList(sudo.stagesList)
   fillGrid(0);
@@ -443,11 +609,26 @@ class SudokuCell{
   safeAvSetRemove(num){
     if(!this.hasValue() && this.avSet.has(num)){
       this.avSet.delete(num);
+      if(this.avSet.size === 0){
+        throw "Unsolvable puzzle";
+      }
       return true
     }
     else{
       return false
     }
+  }
+  deepCopy(){
+    let res = new SudokuCell()
+    res.value = this.value
+    res.fixed = this.fixed
+    if(this.avSet != null) {
+      res.avSet = new Set()
+      for (let omega of this.avSet) {
+        res.avSet.add(omega)
+      }
+    }
+    return res;
   }
 }
 
@@ -665,7 +846,6 @@ class Partition{
               for(let imageElement of this.imageRes){
                 for (let index of SudokuGrid.I){
                   if(!this.domainRes.has(this.domain[index]) && this.image[index] !== null && this.image[index].has(imageElement)) {
-                    console.log("Cell: ", index, ", prunea a:", imageElement, "  que esta en: ", this.image[index]);
                     return true;
                   }
                 }
@@ -801,11 +981,10 @@ class SudokuGrid{
     }
 }
   updateCell(row, col, num){
-    console.log("row: ", row, ",   col: ", col);
     this.grid[row][col].value = num;
     this.grid[row][col].avSet = null;
     if(this.brackets.rowImage[row].has(num) || this.brackets.colImage[col].has(num) || this.brackets.boxImage[this.boxOf(row,col)].has(num)){
-
+      throw "Unsolvable puzzle";
     }
     this.brackets.rowImage[row].add(num);
     this.brackets.colImage[col].add(num);
@@ -837,7 +1016,6 @@ class SudokuGrid{
   bracketHasAllCandidates(bracketIndex, map){
     // Checks if all the candidates are in a bracket in at leas one cell, or as a cell's value.
     // if not, then there is an error in the grid.
-    //console.log(Array.from(map.key), this.brackets.allImage[bracketIndex])
     for(let omega of SudokuGrid.Omega){
       if(!this.brackets.allImage[bracketIndex].has(omega) && !map.has(omega)){
         throw "Candidate missing in bracket";
@@ -907,11 +1085,9 @@ class SudokuGrid{
     for (let cell of targetBracket){
       if(!intersection.has(cell)){
         if(cell.avSet !== null && cell.avSet.has(candidate)) {
-          console.log("candidate: ", candidate)
           for(let inCell of intersection){
             inCell.rootAvSet.add(candidate);
           }
-
           cell.safeAvSetRemove(candidate);
           cell.changedAvSet.add(candidate);
           res = true;
@@ -1012,15 +1188,18 @@ class SudokuGrid{
           }
           let nakedValues = subPartition[1];
           let pruneValues = Array.from(nakedValues);
-          console.log("NAKED SUBSET FOUND, Bracket: ", index, ", -cells: ", subPartition[0], " -values: ", subPartition[1])
+          //console.log("NAKED SUBSET FOUND, Bracket: ", index, ", -cells: ", subPartition[0], " -values: ", subPartition[1])
           this.pruneCells(pruneCells, pruneValues);
           for(let value of nakedValues){
             for(let cell of pruneCells){
-              console.log(cell)
-              cell.changedAvSet.add(value)
+              if(cell.avSet != null && cell.avSet.has(value)) {
+                cell.changedAvSet.add(value)
+              }
             }
             for (let cell of sourceCells){
-              cell.rootAvSet.add(value)
+              if(cell.avSet != null && cell.avSet.has(value)) {
+                cell.rootAvSet.add(value)
+              }
             }
           }
           this.addDeepCopy('Naked Subset')
@@ -1056,12 +1235,14 @@ class SudokuGrid{
               cell.rootAvSet.add(omega)
             }
             else{
-              cell.changedAvSet.add(omega)
+              if(cell.avSet != null && cell.avSet.has(omega)) {
+                cell.changedAvSet.add(omega)
+              }
             }
           }
         }
 
-        console.log("HIDDEN SUBSET FOUND, Bracket: ", index, ", -cells: ", hiddenIndexes, " -values: ", hiddenValues)
+        //console.log("HIDDEN SUBSET FOUND, Bracket: ", index, ", -cells: ", hiddenIndexes, " -values: ", hiddenValues)
         this.pruneCells(pruneCells, pruneValues)
         this.addDeepCopy('Hidden Subset')
         return true;
@@ -1094,7 +1275,6 @@ class SudokuGrid{
           for(let i of pruneBracketIndexes){
             pruneBrackets.push(this.brackets.col[i])
           }
-          console.log('rows: ',  exceptionIndexes,'  cols: ', pruneBracketIndexes,'  value: ', omega);
           this.pruneNormalDifference(pruneBrackets, exceptionIndexes, omega, 'Row');
           return true;
         }
@@ -1107,7 +1287,6 @@ class SudokuGrid{
             pruneBrackets.push(this.brackets.row[i])
           }
           this.pruneNormalDifference(pruneBrackets, exceptionIndexes, omega, 'Column');
-          console.log('cols: ',  exceptionIndexes,'  rows: ', pruneBracketIndexes,'  value: ', omega);
           return true;
         }
     }
@@ -1142,16 +1321,17 @@ class SudokuGrid{
     return true;
   }
   solve(){
+    this.stagesListStr = []
     while(!this.isFinished()) {
       if (this.stageOne()) {
-        console.log('Stage 1')
+        this.stagesListStr.push('Stage 1')
       } else {
         if (this.stageTwo()) {
-          console.log('Stage 2')
+          this.stagesListStr.push('Stage 2')
         }
         else{
           if(this.stageThree()){
-            console.log('Stage 3')
+            this.stagesListStr.push('Stage 3')
           }
           else{
             let m, half = Math.floor(SudokuGrid.n/2)
@@ -1159,20 +1339,54 @@ class SudokuGrid{
             this.define_normal_partitions()
             for(m = 2; m<= half; m++){
               if (this.stageFour(m)){
+                this.stagesListStr.push('Stage 4')
                 break;
               }
               if(this.stageFive(m)){
+                this.stagesListStr.push('Stage 5')
                 break;
               }
             }
             if(half < m){
-              console.log('No more to do')
-              break;
+              if(!this.isFinished()){
+                let arr = this.findBacktrackCandidate()
+                let row = arr[0], col = arr[1], omega = arr[2]
+                let backtrackGrid = new SudokuGrid(this)
+                backtrackGrid.updateCell(row, col, omega)
+                try {
+                  if (backtrackGrid.solve()) {
+                    for(let g of backtrackGrid.allGrids) {
+                      this.allGrids.push(g)
+                    }
+                    for(let s of backtrackGrid.stagesList){
+                      this.stagesList.push(s)
+                    }
+                    this.stagesListStr.push('Backtrack')
+                    this.stagesListStr = this.stagesListStr.concat(backtrackGrid.stagesListStr)
+                    this.grid = backtrackGrid.grid;
+                    return true;
+                  } else {
+                    this.pruneCells([this.grid[row][col]], [omega])
+                  }
+                }
+                catch (error){
+                  this.stagesListStr.push('Backtrack Prune')
+                  this.pruneCells([this.grid[row][col]], [omega])
+                }
+              }
+
             }
           }
         }
       }
     }
+    if(this.isFinished()){
+      return true;
+    }
+    else{
+      return false;
+    }
+
   }
 
   rateBracket(mainCell, bracket, omega, rateArray){
@@ -1230,17 +1444,15 @@ class SudokuGrid{
                 selectedRow = row;
                 selectedCol = col;
                 selectedOmega = omega;
-                console.log('row: ', row, ' col: ', col, '  omega: ', omega)
-                console.log(max)
               } else if (current[index] < max[index]) {
                 break;
               }
             }
-            console.log('-----------')
           }
         }
       }
     }
+    console.log('BACKTRACK: ','row: ', selectedRow, ' col: ', selectedCol, '  omega: ', selectedOmega)
     return [selectedRow, selectedCol, selectedOmega];
   }
 
@@ -1290,36 +1502,51 @@ class SudokuGrid{
   static n = 9;
   static I = Array.from(Array(SudokuGrid.n).keys())
   static Omega = Array.from({length: SudokuGrid.n}, (_, i) => i + 1)
-  constructor(numberGrid, n){
-    this.allGrids = [];
-    this.stagesList = [];
-    SudokuGrid.n = n;
-    this.grid = new Array(9);
-    for(let i=0; i<9; i++) {
-      this.grid[i] = new Array(9);
-      for(let j = 0; j < 9; j++){
-        this.grid[i][j] = new SudokuCell();
+  constructor(numberGrid){
+    if(numberGrid instanceof  SudokuGrid){
+      this.allGrids = [];
+      this.stagesList = [];
+      this.grid = new Array(9)
+      for(let i of SudokuGrid.I){
+        this.grid[i] = new Array(9)
       }
-    }
-    let i, j, value;
-    for(i = 0; i < SudokuGrid.n; i++){
-      for(j = 0; j < SudokuGrid.n; j++){
-        value = numberGrid[i][j];
-        if(value !== 0){
-          this.grid[i][j].value = value;
-          this.grid[i][j].fixed = true;
+      for(let row of SudokuGrid.I){
+        for(let col of SudokuGrid.I){
+          this.grid[row][col] = numberGrid.grid[row][col].deepCopy();
         }
-        else{
-          this.grid[i][j].avSet = new Set();
-          for(let k = 1; k <= n; k++){
-            this.grid[i][j].avSet.add(k);
+      }
+      this.brackets = new Bracket(this)
+      this.addDeepCopy('Backtrack')
+    }
+    else {
+      this.allGrids = [];
+      this.stagesList = [];
+      this.grid = new Array(9);
+      for (let i = 0; i < 9; i++) {
+        this.grid[i] = new Array(9);
+        for (let j = 0; j < 9; j++) {
+          this.grid[i][j] = new SudokuCell();
+        }
+      }
+      let i, j, value;
+      for (i = 0; i < SudokuGrid.n; i++) {
+        for (j = 0; j < SudokuGrid.n; j++) {
+          value = numberGrid[i][j];
+          if (value !== 0) {
+            this.grid[i][j].value = value;
+            this.grid[i][j].fixed = true;
+          } else {
+            this.grid[i][j].avSet = new Set();
+            for (let k = 1; k <= SudokuGrid.n; k++) {
+              this.grid[i][j].avSet.add(k);
+            }
           }
         }
       }
+      this.brackets = new Bracket(this);
+      this.defineAvailableSets();
+      this.addDeepCopy("stage 0");
     }
-    this.brackets = new Bracket(this);
-    this.defineAvailableSets();
-    this.addDeepCopy("stage 0");
 
   }
 
