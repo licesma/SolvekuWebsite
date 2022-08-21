@@ -424,21 +424,121 @@ let runExample6=()=>{
   cellDivs[indexOf(8,7)].innerHTML = "";
   cellDivs[indexOf(8,8)].innerHTML = "";
 }
+let runExample7=()=>{
+  cellDivs[indexOf(0,0)].innerHTML = "";
+  cellDivs[indexOf(0,1)].innerHTML = "9";
+  cellDivs[indexOf(0,2)].innerHTML = "";
+  cellDivs[indexOf(0,3)].innerHTML = "";
+  cellDivs[indexOf(0,4)].innerHTML = "";
+  cellDivs[indexOf(0,5)].innerHTML = "";
+  cellDivs[indexOf(0,6)].innerHTML = "";
+  cellDivs[indexOf(0,7)].innerHTML = "";
+  cellDivs[indexOf(0,8)].innerHTML = "3";
+  cellDivs[indexOf(1,0)].innerHTML = "";
+  cellDivs[indexOf(1,1)].innerHTML = "2";
+  cellDivs[indexOf(1,2)].innerHTML = "";
+  cellDivs[indexOf(1,3)].innerHTML = "";
+  cellDivs[indexOf(1,4)].innerHTML = "6";
+  cellDivs[indexOf(1,5)].innerHTML = "";
+  cellDivs[indexOf(1,6)].innerHTML = "";
+  cellDivs[indexOf(1,7)].innerHTML = "";
+  cellDivs[indexOf(1,8)].innerHTML = "5";
+  cellDivs[indexOf(2,0)].innerHTML = "";
+  cellDivs[indexOf(2,1)].innerHTML = "1";
+  cellDivs[indexOf(2,2)].innerHTML = "";
+  cellDivs[indexOf(2,3)].innerHTML = "";
+  cellDivs[indexOf(2,4)].innerHTML = "9";
+  cellDivs[indexOf(2,5)].innerHTML = "2";
+  cellDivs[indexOf(2,6)].innerHTML = "7";
+  cellDivs[indexOf(2,7)].innerHTML = "";
+  cellDivs[indexOf(2,8)].innerHTML = "";
+  cellDivs[indexOf(3,0)].innerHTML = "";
+  cellDivs[indexOf(3,1)].innerHTML = "";
+  cellDivs[indexOf(3,2)].innerHTML = "";
+  cellDivs[indexOf(3,3)].innerHTML = "";
+  cellDivs[indexOf(3,4)].innerHTML = "3";
+  cellDivs[indexOf(3,5)].innerHTML = "";
+  cellDivs[indexOf(3,6)].innerHTML = "";
+  cellDivs[indexOf(3,7)].innerHTML = "";
+  cellDivs[indexOf(3,8)].innerHTML = "";
+  cellDivs[indexOf(4,0)].innerHTML = "5";
+  cellDivs[indexOf(4,1)].innerHTML = "";
+  cellDivs[indexOf(4,2)].innerHTML = "";
+  cellDivs[indexOf(4,3)].innerHTML = "";
+  cellDivs[indexOf(4,4)].innerHTML = "2";
+  cellDivs[indexOf(4,5)].innerHTML = "";
+  cellDivs[indexOf(4,6)].innerHTML = "";
+  cellDivs[indexOf(4,7)].innerHTML = "3";
+  cellDivs[indexOf(4,8)].innerHTML = "7";
+  cellDivs[indexOf(5,0)].innerHTML = "";
+  cellDivs[indexOf(5,1)].innerHTML = "6";
+  cellDivs[indexOf(5,2)].innerHTML = "";
+  cellDivs[indexOf(5,3)].innerHTML = "";
+  cellDivs[indexOf(5,4)].innerHTML = "4";
+  cellDivs[indexOf(5,5)].innerHTML = "";
+  cellDivs[indexOf(5,6)].innerHTML = "";
+  cellDivs[indexOf(5,7)].innerHTML = "1";
+  cellDivs[indexOf(5,8)].innerHTML = "";
+  cellDivs[indexOf(6,0)].innerHTML = "";
+  cellDivs[indexOf(6,1)].innerHTML = "";
+  cellDivs[indexOf(6,2)].innerHTML = "";
+  cellDivs[indexOf(6,3)].innerHTML = "9";
+  cellDivs[indexOf(6,4)].innerHTML = "";
+  cellDivs[indexOf(6,5)].innerHTML = "3";
+  cellDivs[indexOf(6,6)].innerHTML = "";
+  cellDivs[indexOf(6,7)].innerHTML = "";
+  cellDivs[indexOf(6,8)].innerHTML = "";
+  cellDivs[indexOf(7,0)].innerHTML = "6";
+  cellDivs[indexOf(7,1)].innerHTML = "";
+  cellDivs[indexOf(7,2)].innerHTML = "";
+  cellDivs[indexOf(7,3)].innerHTML = "4";
+  cellDivs[indexOf(7,4)].innerHTML = "";
+  cellDivs[indexOf(7,5)].innerHTML = "";
+  cellDivs[indexOf(7,6)].innerHTML = "3";
+  cellDivs[indexOf(7,7)].innerHTML = "";
+  cellDivs[indexOf(7,8)].innerHTML = "";
+  cellDivs[indexOf(8,0)].innerHTML = "8";
+  cellDivs[indexOf(8,1)].innerHTML = "";
+  cellDivs[indexOf(8,2)].innerHTML = "";
+  cellDivs[indexOf(8,3)].innerHTML = "";
+  cellDivs[indexOf(8,4)].innerHTML = "7";
+  cellDivs[indexOf(8,5)].innerHTML = "";
+  cellDivs[indexOf(8,6)].innerHTML = "";
+  cellDivs[indexOf(8,7)].innerHTML = "";
+  cellDivs[indexOf(8,8)].innerHTML = "4";
+}
 const handleSolve = () => {
-  runExample6();
+  //runExample7();
   let mat = [];
   for(let i=0; i<9; i++) {
     mat[i] = new Array(9).fill(0);
   }
+  let str = ""
   for(let index = 0; index < 81; index++){
     if(!Number.isNaN(parseInt(cellDivs[index].innerHTML))) {
       mat[rowOf(index)][colOf(index)] = parseInt(cellDivs[index].innerHTML);
     }
   }
+  for (let row of SudokuGrid.I){
+    for(let col of SudokuGrid.I){
+      str += mat[row][col].toString();
+    }
+  }
+  console.log(str)
+
+
   sudo = new SudokuGrid(mat);
   sudo.solve();
   createList(sudo.stagesList)
   fillGrid(0);
+  let strRes = ""
+  for (let row of SudokuGrid.I){
+    for(let col of SudokuGrid.I){
+      strRes += sudo.grid[row][col].value.toString();
+    }
+  }
+  console.log(strRes)
+
 };
 
 const handleReset = () => {
@@ -1189,7 +1289,7 @@ class SudokuGrid{
           let nakedValues = subPartition[1];
           let pruneValues = Array.from(nakedValues);
           //console.log("NAKED SUBSET FOUND, Bracket: ", index, ", -cells: ", subPartition[0], " -values: ", subPartition[1])
-          this.pruneCells(pruneCells, pruneValues);
+
           for(let value of nakedValues){
             for(let cell of pruneCells){
               if(cell.avSet != null && cell.avSet.has(value)) {
@@ -1202,6 +1302,7 @@ class SudokuGrid{
               }
             }
           }
+          this.pruneCells(pruneCells, pruneValues);
           this.addDeepCopy('Naked Subset')
           return true;
         }
@@ -1257,7 +1358,7 @@ class SudokuGrid{
   }
 
   stageFour(m){
-    return  this.findHiddenSubsets(m) || this.findNakedSubsets(m)
+    return  this.findNakedSubsets(m) || this.findHiddenSubsets(m)
   }
 
   define_normal_partitions(){
@@ -1452,7 +1553,7 @@ class SudokuGrid{
         }
       }
     }
-    console.log('BACKTRACK: ','row: ', selectedRow, ' col: ', selectedCol, '  omega: ', selectedOmega)
+    //console.log('BACKTRACK: ','row: ', selectedRow, ' col: ', selectedCol, '  omega: ', selectedOmega)
     return [selectedRow, selectedCol, selectedOmega];
   }
 
